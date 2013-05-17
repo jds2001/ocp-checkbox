@@ -14,12 +14,12 @@ optical_drive
 package
 sleep
 uname
-__opencompute__
-opencompute/ipmi/admin/dcmi_info
-opencompute/ipmi/user/dcmi_info
-opencompute/ipmi/operator/dcmi_info
-opencompute/ipmi/admin/chassis_status
-opencompute/ipmi/user/chassis_status
+__ipmi__
+ipmi/admin/dcmi_info
+ipmi/user/dcmi_info
+ipmi/operator/dcmi_info
+ipmi/admin/chassis_status
+ipmi/user/chassis_status
 
 
 
