@@ -1,6 +1,6 @@
 # This file is part of Checkbox.
 #
-# Copyright 2012 Canonical Ltd.
+# Copyright 2013 Canonical Ltd.
 # Written by:
 #   Zygmunt Krynicki <zygmunt.krynicki@canonical.com>
 #
@@ -18,21 +18,23 @@
 # along with Checkbox.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-:mod:`plainbox` -- main package
+:mod:`plainbox.impl.test_color`
 ===============================
 
-Simple checkbox redesign, without the complex message passing
-
-All public API is in :mod:`plainbox.public`.
-All abstract base classes are in :mod:`plainbox.abc`.
+Test definitions for plainbox.impl.color
 """
 
-import sys
+from unittest import TestCase
 
-if sys.version_info[0:2] < (3, 2):
-    raise ImportError("plainbox requires python 3.2")  # pragma: no cover
+from plainbox.impl.color import ansi_on, ansi_off
 
-# PEP386 compliant version declaration.
-#
-# This is used by @public decorator to enforce our public API guarantees.
-__version__ = (0, 4, 0, "dev", 0)
+
+class ColorTests(TestCase):
+
+    def test_smoke(self):
+        self.assertEqual(ansi_on.f.RED, "\033[31m")
+        self.assertEqual(ansi_off.f.RED, "")
+        self.assertEqual(ansi_on.b.RED, "\033[41m")
+        self.assertEqual(ansi_off.b.RED, "")
+        self.assertEqual(ansi_on.s.BRIGHT, "\033[1m")
+        self.assertEqual(ansi_off.s.BRIGHT, "")
