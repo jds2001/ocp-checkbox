@@ -7,7 +7,7 @@ import posixpath
 import subprocess
 from glob import glob
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 from distutils.ccompiler import new_compiler
 from distutils.command.build import build
@@ -260,13 +260,15 @@ This project provides an extensible interface for system testing.
 """,
     data_files=DATA_FILES,
     test_suite='checkbox.tests.test_suite',
+    entry_points={
+        'plainbox.parsers': [
+            "pactl-list=checkbox.parsers.pactl:parse_pactl_output",
+        ],
+    },
     scripts=[
         "bin/checkbox-cli", "bin/checkbox-gtk", "bin/checkbox-urwid",
         "bin/checkbox-qt", "bin/checkbox-hw-collection"],
-    packages=[
-        "checkbox", "checkbox.contrib", "checkbox.dbus", "checkbox.lib",
-        "checkbox.parsers", "checkbox.reports", "checkbox.heuristics",
-        "checkbox_cli", "checkbox_gtk", "checkbox_urwid", "checkbox_qt"],
+    packages=find_packages(),
     package_data={
         "": ["cputable"]},
     cmdclass={

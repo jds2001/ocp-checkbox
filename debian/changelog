@@ -1,3 +1,107 @@
+checkbox (0.16.6) UNRELEASED; urgency=low
+
+  [ Brendan Donegan ]
+  * plugins/launchpad_report.py - Don't include attachments which have a status
+    of 'unsupported' (LP: #1196531)
+  * checkbox/parsers/lshwjson.py, scripts/memory_compare - Create a parser for
+    lshw and use this in the memory_compare script instead of dmidecode
+    (LP: #1184661)
+  * plugins/subunit_report.py - Prevent crash when job output contains 
+    non-ASCII characters (LP: #1196838)
+
+  [ Alberto Milone ]
+  * checkbox-old/scripts/color_depth_info:
+    - Be more strict in the regex so as to make sure that we catch the
+      correct string.
+    - Open the log using the 'rb' flag. This prevents python from throwing
+      a UnicodeDecodeError.
+
+ -- Brendan Donegan <brendan.donegan@canonical.com>  Fri, 28 Jun 2013 15:02:58 +0100
+
+checkbox (0.16.5) saucy; urgency=low
+
+  [ Brendan Donegan ]
+  * scripts/xml_sanitizer, jobs/info.txt.in - pipe output from udevadm
+    through new xml_sanitizer script which removes characters which are
+    invalid in XML, so that it doesn't cause trouble (LP: #1192093)
+
+  [ Jeff Marcom ]
+  * scripts/virtualization: fixed issue introduced in last patch that
+    caused the kvm test to not run at all. Changed file permission lvl
+    on created temporary directory. Fixed issue where test log was being
+    deleted along with temporary directory(LP: #1192979)
+
+  [ Daniel Manrique ]
+  * scripts/audio_test: Improved peak detection algorithm and made the
+    audio_test slighly more sensitive (LP: #1070776). Rewrote script to
+    use/require Python 3 and gstreamer 1.0. Updated job requirements and
+    checkbox dependencies accordingly. 
+
+ -- Brendan Donegan <brendan.donegan@canonical.com>  Fri, 28 Jun 2013 15:02:37 +0100
+
+checkbox (0.16.4) saucy; urgency=low
+
+  [ Jeff Lane ]
+  * scripts/virtualization: script no longer fails when trying to cast an
+    empty timeout setting in config file to int(). Added additional error
+    handling. (LP: #1186259)
+  * jobs/stress.txt.in: added dependencies on single cycle tests to the 30
+    cycle S3 and S4 test to avoid unnecessary rebooting by tester on expected
+    failures. (LP: #1188284)
+  * scripts/fwts_test, scripts/sleep_test: Tests now use a more reliabe marker
+    to determine when the system completed resume. sleep_test output cleaned up
+    to match fwts_test output and not break sleep_time_check (LP: #1188221)
+
+  [ Brendan Donegan ]
+  * jobs/optical.txt.in - Added VERIFICATION section for cdrom-write job so that
+    the Qt UI doesn't barf when it finds there is no such section (LP: #1185759)
+  * qt/frontend/treemodel.cpp: Deselect a parent node only if all of its
+    child nodes are actually unselected rather than partially selected as
+    before. (LP: #1180342)
+  * qt/frontend/qtfront.cpp, qtfront.h, checkbox_qt/qt_interface.py: Select
+    appropriate radio button in showTest if the test already has a result set
+    rather than just defaulting to skip always (LP: #1181952)
+  * jobs/touchpad.txt.in - Remove the requires line for touch_mode in
+    touchpad/horizontal and touchpad/vertical so that those tests will
+    at least run on those systems where they are supposed to (LP: #1184882)
+  * checkbox_qt/qt_interface.py - Order the list of items to be displayed
+    alphabetically, so the order is consistent (LP: #1177647)
+  * debian/rules - Add checkbox-hw-collection so that it's treated in the same
+    way as other checkbox derived packages like checkbox-qt (LP: #1188601)
+
+  [ Daniel Manrique ]
+  * jobs/stress.txt.in: fixed a few inconsistent invocations of sleep_test.
+  * checkbox/tests/test_message_files.py: Added a test to verify jobs contain
+    required fields (LP: #1187216).
+
+  [ Sylvain Pineau ]
+  * jobs/resource.txt.in: updated version of the package resource job command
+    supporting both precise and newer releases (LP: #1184197)
+  * scripts/audio_settings: Use the new pactl parser to guess the right profile
+    to select for HDMI / DisplayPort tests.
+  * setup.py: Use setuptools find_packages(), more future proof.
+  * checkbox/scripts/audio_settings.py: Save active profiles for all alsa cards
+    (LP: #169425)
+  * scripts/gst_pipeline_test: Use the logging module and the same config as
+    audio_settings.
+
+ -- Brendan Donegan <brendan.donegan@canonical.com>  Fri, 31 May 2013 16:04:42 +0100
+
+checkbox (0.16.3) saucy; urgency=low
+
+  [ Sylvain Pineau ]
+  * jobs/info.txt.in, scripts/efi_resource: parse the kern.log backups too.
+  * scripts/gpu_test, jobs/suspend.txt.in: Call firefox instead of the default
+    browser.
+
+  [ Daniel Manrique ]
+  * Expanded optical_drive resource command so it correctly handles systems
+    with no optical drive (LP: #1182489)
+  * Added missing plugin files to po/POTFILES.in so their strings are
+    translatable (LP: #1183271)
+
+ -- Brendan Donegan <brendan.donegan@canonical.com>  Fri, 31 May 2013 16:04:37 +0100
+
 checkbox (0.16.2) saucy; urgency=low
 
   [ Alberto Milone ]

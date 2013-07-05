@@ -147,7 +147,7 @@ class QTInterface(UserInterface):
 
         def buildBranch(options, default, baseIndex="1"):
             internalIndex = 1
-            for test, state in options.items():
+            for test, state in sorted(options.items()):
                 active = test in default
                 if isinstance(state, dict):
                     indexedOptions[
@@ -235,7 +235,7 @@ class QTInterface(UserInterface):
 
         self.qtiface.showTest(
             test["purpose"], test["steps"], test["verification"], info, test["data"],
-            test["suite"], test["name"], enableTestButton)
+            test["status"], test["suite"], test["name"], enableTestButton)
         self.wait_on_signals(
             startTestClicked=onStartTestClicked,
             nextTestClicked=onNextTestClicked,
