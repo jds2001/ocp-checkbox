@@ -40,9 +40,9 @@ class OCP_HW_Info (object):
         rc = p.returncode #gather return code from ipmiutil command
         if rc==0:
             self.output=stdout # saving output for possible future comparison
-            print "this command succeeded"
+            print("this command succeeded")
         else:
-            print "This command failed"
+            print("This command failed")
 
     def remote_ipmitool_cmd(self, username, password, command):
         self.output = [] #set output to null
@@ -53,9 +53,9 @@ class OCP_HW_Info (object):
         rc = p.returncode #gather return  code from ipmitool command
         if rc==0:
             self.output = stdout # saving output for possible future comparision
-            print "this command succeeded"
+            print("this command succeeded")
         else:
-            print "This command failed"
+            print("This command failed")
 
 
 def main():
@@ -81,71 +81,71 @@ def main():
     new.remote_ipmitool_cmd(new.admin_username,new.admin_password,"power status") #checks current status
 
     if new.output[0]=="Chassis Power is on\n":  
-        print "Chassis is online"
-        print "###Command Output= " + new.output[0]
-        print "Attempting to power reset chassis"
+        print("Chassis is online")
+        print("###Command Output= " + new.output[0])
+        print("Attempting to power reset chassis")
         #Send Reset Command
         new.remote_ipmitool_cmd(new.admin_username,new.admin_password,"power reset")
-        print "###Command Output= " + new.output[0]
+        print("###Command Output= " + new.output[0])
         time.sleep(60)
         #Check Status of machine (expect on)
         new.remote_ipmitool_cmd(new.admin_username,new.admin_password,"power status")
         if new.output[0]=="Chassis Power is on\n":
-            print "Chassis is online after reset"
-            print "###Command Output= " + new.output[0]
-            print "Attempting to power down chassis"
+            print("Chassis is online after reset")
+            print("###Command Output= " + new.output[0])
+            print("Attempting to power down chassis")
             #Send Power off Command
             new.remote_ipmitool_cmd(new.admin_username,new.admin_password,"power off")
-            print "###Command Output= " + new.output[0]
+            print("###Command Output= " + new.output[0])
             time.sleep(60)
             new.remote_ipmitool_cmd(new.admin_username,new.admin_password,"power status")
-            print new.output[0]
+            print(new.output[0])
             if new.output[0]=="Chassis Power is off\n":
-                print "Chassis is off after power off"
-                print "###Command Output= " + new.output[0]
-                print "Attempting to power on chassis"
+                print("Chassis is off after power off")
+                print("###Command Output= " + new.output[0])
+                print("Attempting to power on chassis")
                 #Send Power on Command
                 new.remote_ipmitool_cmd(new.admin_username,new.admin_password,"power on")
-                print "###Command Output= " + new.output[0]
+                print("###Command Output= " + new.output[0])
                 time.sleep(60)
                 #check if system is online
                 new.remote_ipmitool_cmd(new.admin_username,new.admin_password,"power status")
                 if new.output[0]=="Chassis Power is on\n":
-                    print "OCP Ready Test Success!!!!!!!!"
+                    print("OCP Ready Test Success!!!!!!!!")
             else:
-                print "Error! Chassis power off failed"
+                print("Error! Chassis power off failed")
         else:
-            print "Error! Chassis is not online after power reset, failure"
+            print("Error! Chassis is not online after power reset, failure")
     else:
-        print "Chassis is offline"
-        print "###Command Output= " + new.output[0]
-        print "Attempting to power on chassis"
+        print("Chassis is offline")
+        print("###Command Output= " + new.output[0])
+        print("Attempting to power on chassis")
         #Sending Power On Command
         new.remote_ipmitool_cmd(new.admin_username,new.admin_password,"power on")
-        print "###Command Output= " + new.output[0]
+        print("###Command Output= " + new.output[0])
         time.sleep(60)
         #check if system is online
         new.remote_ipmitool_cmd(new.admin_username,new.admin_password,"power status")
         if new.output[0]=="Chassis Power is on\n":
-             print "Chassis is online"
-             print "###Command Output= " + new.output[0]
-             print "Attempting to power reset chassis"
+             print("Chassis is online")
+             print("###Command Output= " + new.output[0])
+             print("Attempting to power reset chassis")
              #Send Reset Command
              new.remote_ipmitool_cmd(new.admin_username,new.admin_password,"power reset")
-             print "###Command Output= " + new.output[0]
+             print("###Command Output= " + new.output[0])
              time.sleep(60)
              new.remote_ipmitool_cmd(new.admin_username,new.admin_password,"power status")
              if new.output[0]=="Chassis Power is on\n":
-                 print "Chassis is online after reset"
-                 print "###Command Output= " + new.output[0]
-                 print "Attempting to power down chassis"
+                 print("Chassis is online after reset")
+                 print("###Command Output= " + new.output[0])
+                 print("Attempting to power down chassis")
                  #Send Power off Command
                  new.remote_ipmitool_cmd(new.admin_username,new.admin_password,"power off")
-                 print "###Command Output= " + new.output[0]
+                 print("###Command Output= " + new.output[0])
                  time.sleep(60)
                  new.remote_ipmitool_cmd(new.admin_username,new.admin_password,"power status")
-                 print new.output[0]
-                 print "OCP Ready Test Success!!!!!!!!"
+                 print(new.output[0])
+                 print("OCP Ready Test Success!!!!!!!!")
 
 if __name__ == "__main__":
     main()
