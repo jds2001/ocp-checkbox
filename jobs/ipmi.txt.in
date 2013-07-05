@@ -1,6 +1,15 @@
+plugin: attachment
+name: ipmi/admin/chassis_info
+requires: package.name == 'ipmitool'
+user: root
+environ: OC_IPMI_TARGET OC_IPMI_ADMIN OC_IPMI_ADMIN_PASSWORD
+command: ipmitool -I lanplus -H $OC_IPMI_TARGET -U $OC_IPMI_ADMIN -P $OC_IPMI_ADMIN_PASSWORD fru -C3
+description:
+ Retrieve chassis model and manufacturer information.
+
 plugin: shell
 name: ipmi/admin/dcmi_info
-requires: package.name == 'ipmiutil'
+requires: package.name == 'ipmitool'
 user: root
 environ: OC_IPMI_TARGET OC_IPMI_ADMIN OC_IPMI_ADMIN_PASSWORD
 command: ipmiutil dcmi -N $OC_IPMI_TARGET $OC_IPMI_ADMIN $OC_IPMI_ADMIN_PASSWORD
@@ -24,6 +33,80 @@ environ: OC_IPMI_TARGET OC_IPMI_OPERATOR OC_IPMI_OPERATOR_PASSWORD
 command: ipmiutil dcmi -N $OC_IPMI_TARGET $OC_IPMI_OPERATOR $OC_IPMI_OPERATOR_PASSWORD
 description:
  Get DCMI capabilities with Operator
+
+plugin: shell
+name: ipmi/admin/check_power_on
+requires: package.name == 'ipmitool'
+user: root
+environ: OC_IPMI_TARGET OC_IPMI_ADMIN OC_IPMI_ADMIN_PASSWORD
+command: ipmitool -I lanplus -H $OC_IPMI_TARGET -U $OC_IPMI_ADMIN -P $OC_IPMI_ADMIN_PASSWORD chassis power status -C3 | grep -q "on"
+description:
+ Retrieve Chassis Status information with Admin credentials
+
+plugin: shell
+name: ipmi/admin/check_power_off
+requires: package.name == 'ipmitool'
+user: root
+environ: OC_IPMI_TARGET OC_IPMI_ADMIN OC_IPMI_ADMIN_PASSWORD
+command: ipmitool -I lanplus -H $OC_IPMI_TARGET -U $OC_IPMI_ADMIN -P $OC_IPMI_ADMIN_PASSWORD chassis power status -C3 | grep -q "off"
+description:
+ Retrieve Chassis Status information with Admin credentials
+
+plugin: shell
+name: ipmi/admin/power_on
+requires: package.name == 'ipmitool'
+depends: ipmi/admin/check_power_off
+user: root
+environ: OC_IPMI_TARGET OC_IPMI_ADMIN OC_IPMI_ADMIN_PASSWORD
+command: ipmitool -I lanplus -H $OC_IPMI_TARGET -U $OC_IPMI_ADMIN -P $OC_IPMI_ADMIN_PASSWORD chassis power on -C3
+description:
+ Power on server via BMC with Admin credentials
+
+plugin: shell
+name: ipmi/admin/power_off
+requires: package.name == 'ipmitool'
+depends: ipmi/admin/check_power_on
+user: root
+environ: OC_IPMI_TARGET OC_IPMI_ADMIN OC_IPMI_ADMIN_PASSWORD
+command: ipmitool -I lanplus -H $OC_IPMI_TARGET -U $OC_IPMI_ADMIN -P $OC_IPMI_ADMIN_PASSWORD chassis power off -C3
+description:
+ Power off server via BMC with Admin credentials
+
+plugin: shell
+name: ipmi/admin/chassis_self_test
+requires: package.name == 'ipmitool'
+user: root
+environ: OC_IPMI_TARGET OC_IPMI_ADMIN OC_IPMI_ADMIN_PASSWORD
+command: ipmitool -I lanplus -H $OC_IPMI_TARGET -U $OC_IPMI_ADMIN -P $OC_IPMI_ADMIN_PASSWORD chassis selftest -C3
+description:
+ Run chassis BMC self test with Admin credentials
+
+plugin: shell
+name: ipmi/admin/dcmi_sensor_info
+requires: package.name == 'ipmitool'
+user: root
+environ: OC_IPMI_TARGET OC_IPMI_ADMIN OC_IPMI_ADMIN_PASSWORD
+command: ipmitool -I lanplus -H $OC_IPMI_TARGET -U $OC_IPMI_ADMIN -P $OC_IPMI_ADMIN_PASSWORD dcmi sensors -C3
+description:
+ Retrieve sensor info via dcmi 
+
+plugin: shell
+name: ipmi/admin/dcmi_temp_readings
+requires: package.name == 'ipmitool'
+user: root
+environ: OC_IPMI_TARGET OC_IPMI_ADMIN OC_IPMI_ADMIN_PASSWORD
+command: ipmitool -I lanplus -H $OC_IPMI_TARGET -U $OC_IPMI_ADMIN -P $OC_IPMI_ADMIN_PASSWORD dcmi get_temp_reading -C3
+description:
+ Retrieve chassis temperature readings via dcmi
+
+plugin: shell
+name: ipmi/admin/detailed_sensor_readings
+requires: package.name == 'ipmitool'
+user: root
+environ: OC_IPMI_TARGET OC_IPMI_ADMIN OC_IPMI_ADMIN_PASSWORD
+command: ipmitool -I lanplus -H $OC_IPMI_TARGET -U $OC_IPMI_ADMIN -P $OC_IPMI_ADMIN_PASSWORD sensor -C3
+description:
+ Retrieve detailed chassis sensor readings
 
 plugin: shell
 name: ipmi/admin/chassis_status
