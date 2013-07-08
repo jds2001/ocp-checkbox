@@ -1,5 +1,5 @@
 plugin: attachment
-name: ipmi/admin/chassis_info
+name: ipmi/out_of_band/admin/chassis_info
 requires: package.name == 'ipmitool'
 user: root
 environ: OC_IPMI_TARGET OC_IPMI_ADMIN OC_IPMI_ADMIN_PASSWORD
@@ -8,7 +8,7 @@ description:
  Retrieve chassis model and manufacturer information.
 
 plugin: shell
-name: ipmi/admin/dcmi_info
+name: ipmi/out_of_band/admin/dcmi_info
 requires: package.name == 'ipmitool'
 user: root
 environ: OC_IPMI_TARGET OC_IPMI_ADMIN OC_IPMI_ADMIN_PASSWORD
@@ -35,7 +35,7 @@ description:
  Get DCMI capabilities with Operator
 
 plugin: shell
-name: ipmi/admin/check_power_on
+name: ipmi/out_of_band/admin/check_power_on
 requires: package.name == 'ipmitool'
 user: root
 environ: OC_IPMI_TARGET OC_IPMI_ADMIN OC_IPMI_ADMIN_PASSWORD
@@ -44,7 +44,7 @@ description:
  Retrieve Chassis Status information with Admin credentials
 
 plugin: shell
-name: ipmi/admin/check_power_off
+name: ipmi/out_of_band/admin/check_power_off
 requires: package.name == 'ipmitool'
 user: root
 environ: OC_IPMI_TARGET OC_IPMI_ADMIN OC_IPMI_ADMIN_PASSWORD
@@ -53,9 +53,9 @@ description:
  Retrieve Chassis Status information with Admin credentials
 
 plugin: shell
-name: ipmi/admin/power_on
+name: ipmi/out_of_band/admin/power_on
 requires: package.name == 'ipmitool'
-depends: ipmi/admin/check_power_off
+depends: ipmi/out_of_band/admin/check_power_off
 user: root
 environ: OC_IPMI_TARGET OC_IPMI_ADMIN OC_IPMI_ADMIN_PASSWORD
 command: ipmitool -I lanplus -H $OC_IPMI_TARGET -U $OC_IPMI_ADMIN -P $OC_IPMI_ADMIN_PASSWORD chassis power on -C3
@@ -63,9 +63,9 @@ description:
  Power on server via BMC with Admin credentials
 
 plugin: shell
-name: ipmi/admin/power_off
+name: ipmi/out_of_band/admin/power_off
 requires: package.name == 'ipmitool'
-depends: ipmi/admin/check_power_on
+depends: ipmi/out_of_band/admin/check_power_on
 user: root
 environ: OC_IPMI_TARGET OC_IPMI_ADMIN OC_IPMI_ADMIN_PASSWORD
 command: ipmitool -I lanplus -H $OC_IPMI_TARGET -U $OC_IPMI_ADMIN -P $OC_IPMI_ADMIN_PASSWORD chassis power off -C3
@@ -73,7 +73,7 @@ description:
  Power off server via BMC with Admin credentials
 
 plugin: shell
-name: ipmi/admin/chassis_self_test
+name: ipmi/out_of_band/admin/chassis_self_test
 requires: package.name == 'ipmitool'
 user: root
 environ: OC_IPMI_TARGET OC_IPMI_ADMIN OC_IPMI_ADMIN_PASSWORD
@@ -82,7 +82,7 @@ description:
  Run chassis BMC self test with Admin credentials
 
 plugin: shell
-name: ipmi/admin/dcmi_sensor_info
+name: ipmi/out_of_band/admin/dcmi_sensor_info
 requires: package.name == 'ipmitool'
 user: root
 environ: OC_IPMI_TARGET OC_IPMI_ADMIN OC_IPMI_ADMIN_PASSWORD
@@ -91,7 +91,7 @@ description:
  Retrieve sensor info via dcmi 
 
 plugin: shell
-name: ipmi/admin/dcmi_temp_readings
+name: ipmi/out_of_band/admin/dcmi_temp_readings
 requires: package.name == 'ipmitool'
 user: root
 environ: OC_IPMI_TARGET OC_IPMI_ADMIN OC_IPMI_ADMIN_PASSWORD
@@ -100,7 +100,7 @@ description:
  Retrieve chassis temperature readings via dcmi
 
 plugin: shell
-name: ipmi/admin/detailed_sensor_readings
+name: ipmi/out_of_band/admin/detailed_sensor_readings
 requires: package.name == 'ipmitool'
 user: root
 environ: OC_IPMI_TARGET OC_IPMI_ADMIN OC_IPMI_ADMIN_PASSWORD
@@ -109,7 +109,7 @@ description:
  Retrieve detailed chassis sensor readings
 
 plugin: shell
-name: ipmi/admin/chassis_status
+name: ipmi/out_of_band/admin/chassis_status
 requires: package.name == 'ipmitool'
 user: root
 environ: OC_IPMI_TARGET OC_IPMI_ADMIN OC_IPMI_ADMIN_PASSWORD

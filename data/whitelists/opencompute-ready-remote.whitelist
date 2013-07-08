@@ -15,14 +15,14 @@ package
 sleep
 uname
 __ipmi__
-ipmi/admin/chassis_info
-ipmi/admin/power_off
-ipmi/admin/power_on
-ipmi/admin/chassis_self_test
-ipmi/admin/dcmi_sensor_info
-ipmi/admin/dcmi_temp_readings
-ipmi/admin/detailed_sensor_readings
-ipmi/admin/chassis_status
+ipmi/out_of_band/admin/chassis_info
+ipmi/out_of_band/admin/power_off
+ipmi/out_of_band/admin/power_on
+ipmi/out_of_band/admin/chassis_self_test
+ipmi/out_of_band/admin/dcmi_sensor_info
+ipmi/out_of_band/admin/dcmi_temp_readings
+ipmi/out_of_band/admin/detailed_sensor_readings
+ipmi/out_of_band/admin/chassis_status
 
 
 
