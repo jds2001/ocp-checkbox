@@ -14,13 +14,16 @@ optical_drive
 package
 sleep
 uname
-__ipmi__
+__ipmi_out_of_band__
 ipmi/out_of_band/admin/chassis_info
 ipmi/out_of_band/admin/power_off
 ipmi/out_of_band/admin/power_on
+ipmi/out_of_band/admin/power_cycle
+ipmi/out_of_band/admin/power_reset
+ipmi/out_of_band/admin/power_policy_always_on
+ipmi/out_of_band/admin/power_policy_always_off
+ipmi/out_of_band/admin/power_policy_previous
 ipmi/out_of_band/admin/chassis_self_test
-ipmi/out_of_band/admin/dcmi_sensor_info
-ipmi/out_of_band/admin/dcmi_temp_readings
 ipmi/out_of_band/admin/detailed_sensor_readings
 ipmi/out_of_band/admin/chassis_status
 
