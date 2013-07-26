@@ -1,4 +1,4 @@
-checkbox (0.16.6) UNRELEASED; urgency=low
+checkbox (0.16.6ubuntu1) UNRELEASED; urgency=low
 
   [ Brendan Donegan ]
   * plugins/launchpad_report.py - Don't include attachments which have a status
@@ -16,7 +16,10 @@ checkbox (0.16.6) UNRELEASED; urgency=low
     - Open the log using the 'rb' flag. This prevents python from throwing
       a UnicodeDecodeError.
 
- -- Brendan Donegan <brendan.donegan@canonical.com>  Fri, 28 Jun 2013 15:02:58 +0100
+  [ Jeff Marcom ]
+  * jobs/ipmi_out_of_band.txt.in - added new out of band ipmi tests
+
+ -- Jeff Marcom <jeff.marcom@canonical.com>  Fri, 26 Jul 2013 13:34:24 -0400
 
 checkbox (0.16.5) saucy; urgency=low
 
