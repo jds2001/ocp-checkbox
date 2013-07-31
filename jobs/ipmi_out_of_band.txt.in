@@ -3,7 +3,7 @@ name: ipmi/in_band/admin/chassis_info
 requires: package.name == 'ipmitool'
 user: root
 command: ipmitool fru -C3
-description:
+_description:
  Retrieve chassis model and manufacturer information.
 
 plugin: attachment
@@ -12,7 +12,7 @@ requires: package.name == 'ipmitool'
 user: root
 environ: IPMI_TARGET IPMI_ADMIN IPMI_ADMIN_PASSWORD
 command: ipmitool -I lanplus -H $IPMI_TARGET -U $IPMI_ADMIN -P $IPMI_ADMIN_PASSWORD fru -C3
-description:
+_description:
  Retrieve chassis model and manufacturer information.
 
 plugin: shell
@@ -21,7 +21,7 @@ requires: package.name == 'ipmitool'
 user: root
 environ: IPMI_TARGET IPMI_ADMIN IPMI_ADMIN_PASSWORD
 command: ipmitool -I lanplus -H $IPMI_TARGET -U $IPMI_ADMIN -P $IPMI_ADMIN_PASSWORD chassis power status -C3 | grep -q "on"
-description:
+_description:
  Retrieve Chassis Status information with Admin credentials
 
 plugin: shell
@@ -30,7 +30,7 @@ requires: package.name == 'ipmitool'
 user: root
 environ: IPMI_TARGET IPMI_ADMIN IPMI_ADMIN_PASSWORD
 command: ipmitool -I lanplus -H $IPMI_TARGET -U $IPMI_ADMIN -P $IPMI_ADMIN_PASSWORD chassis power status -C3 | grep -q "off"
-description:
+_description:
  Retrieve Chassis Status information with Admin credentials
 
 plugin: shell
@@ -40,7 +40,7 @@ depends: ipmi/out_of_band/admin/check_power_off
 user: root
 environ: IPMI_TARGET IPMI_ADMIN IPMI_ADMIN_PASSWORD
 command: ipmitool -I lanplus -H $IPMI_TARGET -U $IPMI_ADMIN -P $IPMI_ADMIN_PASSWORD chassis power on -C3; retval=$?; sleep 30; exit $retval
-description:
+_description:
  Power on server via BMC with Admin credentials
 
 plugin: shell
@@ -50,7 +50,7 @@ depends: ipmi/out_of_band/admin/check_power_on
 user: root
 environ: IPMI_TARGET IPMI_ADMIN IPMI_ADMIN_PASSWORD
 command: ipmitool -I lanplus -H $IPMI_TARGET -U $IPMI_ADMIN -P $IPMI_ADMIN_PASSWORD chassis power off -C3; retval=$?; sleep 30; exit $retval
-description:
+_description:
  Power off server via BMC with Admin credentials
 
 plugin: shell
@@ -59,7 +59,7 @@ requires: package.name == 'ipmitool'
 user: root
 environ: IPMI_TARGET IPMI_ADMIN IPMI_ADMIN_PASSWORD
 command: ipmitool -I lanplus -H $IPMI_TARGET -U $IPMI_ADMIN -P $IPMI_ADMIN_PASSWORD chassis power reset -C3; retval=$?; sleep 30; exit $retval
-description:
+_description:
  Power reset server via BMC with Admin credentials
 
 plugin: shell
@@ -68,7 +68,7 @@ requires: package.name == 'ipmitool'
 user: root
 environ: IPMI_TARGET IPMI_ADMIN IPMI_ADMIN_PASSWORD
 command: ipmitool -I lanplus -H $IPMI_TARGET -U $IPMI_ADMIN -P $IPMI_ADMIN_PASSWORD chassis power cycle -C3; retval=$?; sleep 30; exit $retval
-description:
+_description:
  Power cycle server via BMC with Admin credentials
 
 plugin: shell
@@ -77,7 +77,7 @@ requires: package.name == 'ipmitool'
 user: root
 environ: IPMI_TARGET IPMI_ADMIN IPMI_ADMIN_PASSWORD
 command: ipmitool -I lanplus -H $IPMI_TARGET -U $IPMI_ADMIN -P $IPMI_ADMIN_PASSWORD chassis policy always-on -C3
-description:
+_description:
  Set server power policy to always on via BMC with Admin credentials
 
 plugin: shell
@@ -86,7 +86,7 @@ requires: package.name == 'ipmitool'
 user: root
 environ: IPMI_TARGET IPMI_ADMIN IPMI_ADMIN_PASSWORD
 command: ipmitool -I lanplus -H $IPMI_TARGET -U $IPMI_ADMIN -P $IPMI_ADMIN_PASSWORD chassis policy always-off -C3
-description:
+_description:
  Set server power policy to always off via BMC with Admin credentials
 
 plugin: shell
@@ -95,7 +95,7 @@ requires: package.name == 'ipmitool'
 user: root
 environ: IPMI_TARGET IPMI_ADMIN IPMI_ADMIN_PASSWORD
 command: ipmitool -I lanplus -H $IPMI_TARGET -U $IPMI_ADMIN -P $IPMI_ADMIN_PASSWORD chassis policy previous -C3
-description:
+_description:
  Set server power policy to previous via BMC with Admin credentials
 
 plugin: shell
@@ -103,7 +103,7 @@ name: ipmi/in_band/admin/chassis_self_test
 requires: package.name == 'ipmitool'
 user: root
 command: ipmitool chassis selftest -C3
-description:
+_description:
  Run chassis BMC self test with Admin credentials
 
 plugin: shell
@@ -112,7 +112,7 @@ requires: package.name == 'ipmitool'
 user: root
 environ: IPMI_TARGET IPMI_ADMIN IPMI_ADMIN_PASSWORD
 command: ipmitool -I lanplus -H $IPMI_TARGET -U $IPMI_ADMIN -P $IPMI_ADMIN_PASSWORD chassis selftest -C3
-description:
+_description:
  Run chassis BMC self test with Admin credentials
 
 plugin: shell
@@ -120,7 +120,7 @@ name: ipmi/in_band/admin/detailed_sensor_readings
 requires: package.name == 'ipmitool'
 user: root
 command: ipmitool sensor -C3
-description:
+_description:
  Retrieve detailed chassis sensor readings
 
 plugin: shell
@@ -129,7 +129,7 @@ requires: package.name == 'ipmitool'
 user: root
 environ: IPMI_TARGET IPMI_ADMIN IPMI_ADMIN_PASSWORD
 command: ipmitool -I lanplus -H $IPMI_TARGET -U $IPMI_ADMIN -P $IPMI_ADMIN_PASSWORD sensor -C3
-description:
+_description:
  Retrieve detailed chassis sensor readings
 
 plugin: shell
@@ -137,7 +137,7 @@ name: ipmi/in_band/admin/chassis_status
 requires: package.name == 'ipmitool'
 user: root
 command: ipmitool chassis status -C3
-description:
+_description:
  Retrieve Chassis Status information with Admin credentials
 
 plugin: shell
@@ -146,6 +146,6 @@ requires: package.name == 'ipmitool'
 user: root
 environ: IPMI_TARGET IPMI_ADMIN IPMI_ADMIN_PASSWORD
 command: ipmitool -I lanplus -H $IPMI_TARGET -U $IPMI_ADMIN -P $IPMI_ADMIN_PASSWORD chassis status -C3
-description:
+_description:
  Retrieve Chassis Status information with Admin credentials
 
