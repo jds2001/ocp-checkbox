@@ -19,7 +19,7 @@ qt/checkbox-qt.desktop.in
 [type: gettext/rfc822deb] jobs/info.txt.in
 [type: gettext/rfc822deb] jobs/input.txt.in
 [type: gettext/rfc822deb] jobs/install.txt.in
-[type: gettext/rfc822deb] jobs/ipmi.txt.in
+[type: gettext/rfc822deb] jobs/ipmi_out_of_band.txt.in
 [type: gettext/rfc822deb] jobs/keys.txt.in
 [type: gettext/rfc822deb] jobs/led.txt.in
 [type: gettext/rfc822deb] jobs/local.txt.in
