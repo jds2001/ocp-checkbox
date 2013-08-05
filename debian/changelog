@@ -1,4 +1,4 @@
-checkbox (0.16.6-ocp) UNRELEASED; urgency=low
+checkbox (0.16.6~OCP) UNRELEASED; urgency=low
 
   * INITIAL RELEASE:
     based on checkbox 0.16.6 from lp:checkbox with modificiations specific to
