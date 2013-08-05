@@ -1,4 +1,4 @@
-checkbox (0.1.0) UNRELEASED; urgency=low
+checkbox (0.16.6-ocp) UNRELEASED; urgency=low
 
   * INITIAL RELEASE:
     based on checkbox 0.16.6 from lp:checkbox with modificiations specific to
@@ -6,5 +6,10 @@ checkbox (0.1.0) UNRELEASED; urgency=low
 
   [ Jeff Marcom ]
   * jobs/ipmi_out_of_band.txt.in - added new out of band ipmi tests
+
+  [ Jeff Lane ]
+  * data/ - Cleanup, removed unnecessary data files, dirs and whitelists
+    bin/ - all checkbox launchers now default to 
+    opencompute-ready-local.whitelist
 
  -- Jeff Marcom <jeff.marcom@canonical.com>  Wed, 31 Jul 2013 19:36:52 -0400
