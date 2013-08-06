@@ -8,6 +8,7 @@ qt/checkbox-qt.desktop.in
 [type: gettext/rfc822deb] jobs/codecs.txt.in
 [type: gettext/rfc822deb] jobs/cpu.txt.in
 [type: gettext/rfc822deb] jobs/daemons.txt.in
+[type: gettext/rfc822deb] jobs/dcmi_in_band.txt.in
 [type: gettext/rfc822deb] jobs/disk.txt.in
 [type: gettext/rfc822deb] jobs/esata.txt.in
 [type: gettext/rfc822deb] jobs/expresscard.txt.in
