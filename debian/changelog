@@ -6,6 +6,7 @@ checkbox (0.16.6~OCP) UNRELEASED; urgency=low
 
   [ Jeff Marcom ]
   * jobs/ipmi_out_of_band.txt.in - added new out of band ipmi tests
+  * jobs/dcmi_in_band.txt.in - added new inband DCMI tests
 
   [ Jeff Lane ]
   * data/ - Cleanup, removed unnecessary data files, dirs and whitelists

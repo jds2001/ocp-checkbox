@@ -1,0 +1,56 @@
+plugin: shell
+name: dcmi/in_band/admin/get_capabilities
+requires: package.name == 'dcmitool'
+user: root
+command: sleep 5; dcmitool dcmi discover
+_description:
+ Retrieve management interface capabilities.
+
+plugin: shell
+name: dcmi/in_band/admin/channel_info
+requires: package.name == 'dcmitool'
+user: root
+command: sleep 5; dcmitool channel info
+_description:
+ Retrieve management interface channel info.
+
+plugin: shell
+name: dcmi/in_band/admin/controller_info
+requires: package.name == 'dcmitool'
+user: root
+command: sleep 5; dcmitool mc info
+_description:
+ Retrieve management interface channel info.
+
+plugin: shell
+name: dcmi/in_band/admin/temp_readings
+requires: package.name == 'dcmitool'
+user: root
+command: sleep 5; dcmitool dcmi sensors
+_description:
+ Retrieve CPU and Baseboard temperature readings.
+
+plugin: shell
+name: dcmi/in_band/admin/chassis_readings
+requires: package.name == 'dcmitool'
+user: root
+command: sleep 5; dcmitool dcmi sensors
+_description:
+ Retrieve Thermal threshold settings and readings.
+
+plugin: shell
+name: dcmi/in_band/admin/chassis_power_status
+requires: package.name == 'dcmitool'
+user: root
+command: sleep 5; dcmitool chassis power status
+_description:
+ Retrieve Chassis power status.
+
+plugin: shell
+name: dcmi/in_band/admin/chassis_status
+requires: package.name == 'dcmitool'
+user: root
+command: sleep 5; dcmitool chassis status
+_description:
+ Retrieve Chassis status.
+

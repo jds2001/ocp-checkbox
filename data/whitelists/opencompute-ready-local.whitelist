@@ -46,6 +46,14 @@ __cpu__
 cpu/clocktest
 cpu/offlining_test
 cpu/topology
+__dcmi_in_band__
+dcmi/in_band/admin/get_capabilities
+dcmi/in_band/admin/channel_info
+dcmi/in_band/admin/controller_info
+dcmi/in_band/admin/temp_readings
+dcmi/in_band/admin/chassis_readings
+dcmi/in_band/admin/chassis_power_status
+dcmi/in_band/admin/chassis_status
 __disk__
 disk/detect
 disk/stats
