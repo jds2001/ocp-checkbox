@@ -2,12 +2,12 @@ plugin: shell
 name: dcmi/in_band/admin/get_capabilities
 requires: package.name == 'dcmitool'
 user: root
-command: sleep 5; dcmitool discover
+command: sleep 5; dcmitool dcmi discover
 _description:
  Retrieve management interface capabilities.
 
 plugin: shell
-name: dcmi/in_band/admin/channel info
+name: dcmi/in_band/admin/channel_info
 requires: package.name == 'dcmitool'
 user: root
 command: sleep 5; dcmitool channel info
@@ -15,7 +15,7 @@ _description:
  Retrieve management interface channel info.
 
 plugin: shell
-name: dcmi/in_band/admin/controller info
+name: dcmi/in_band/admin/controller_info
 requires: package.name == 'dcmitool'
 user: root
 command: sleep 5; dcmitool mc info
