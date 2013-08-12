@@ -12,5 +12,7 @@ checkbox (0.16.6~OCP) UNRELEASED; urgency=low
   * data/ - Cleanup, removed unnecessary data files, dirs and whitelists
     bin/ - all checkbox launchers now default to 
     opencompute-ready-local.whitelist
+  * jobs/, po/, scripts/ - Cleanup, removed unnecessary job and scritp files
+    and their references in po/POTFILES.in
 
  -- Jeff Marcom <jeff.marcom@canonical.com>  Wed, 31 Jul 2013 19:36:52 -0400
