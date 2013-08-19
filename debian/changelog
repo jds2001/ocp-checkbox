@@ -14,5 +14,7 @@ checkbox (0.16.6~OCP) UNRELEASED; urgency=low
     opencompute-ready-local.whitelist
   * jobs/, po/, scripts/ - Cleanup, removed unnecessary job and scritp files
     and their references in po/POTFILES.in
+    checkbox/tests/ - Cleaned up unit tests that were looking for things
+    removed in this merge.
 
  -- Jeff Marcom <jeff.marcom@canonical.com>  Wed, 31 Jul 2013 19:36:52 -0400
