@@ -266,8 +266,8 @@ This project provides an extensible interface for system testing.
         ],
     },
     scripts=[
-        "bin/checkbox-cli", "bin/checkbox-gtk", "bin/checkbox-urwid",
-        "bin/checkbox-qt", "bin/checkbox-hw-collection"],
+        "bin/checkbox-cli", "bin/checkbox-ocp", "bin/checkbox-gtk",
+        "bin/checkbox-urwid", "bin/checkbox-qt", "bin/checkbox-hw-collection"],
     packages=find_packages(),
     package_data={
         "": ["cputable"]},
