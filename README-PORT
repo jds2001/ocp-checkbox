@@ -1,0 +1,76 @@
+The following steps will port your Checkbox source from Ubuntu to CentOS 6.4.
+
+Note: Following steps are on an Ubuntu system.
+1) Install the devscripts package to create a debian package from source.
+  # apt-get install devscripts
+
+2) Perform the following command in the Checkbox source code root directory to create
+ a debian package.
+  /checkbox# debuild -i -us -uc -b
+
+3) Move up to the parent directory to view the debian packages that were built:
+  # cd ..
+
+4) Download alien to convert the .deb packages into .rpm packages.
+  # apt-get install alien
+
+5) Convert the .deb packages into .rpm packages using the following command:
+  alien -r package_name.deb -scripts 
+
+6) Transfer the checkbox*.rpm files to the CentOS 6.4 machine.
+
+Note: Following steps are on a CentOS 6.4 system.
+7) Install python3 on the CentOS machnine.
+  7a) Install Development tools to be able to build from source
+    # yum groupinstall "Development tools"
+  
+  7b) Install extra libraries for the python3 interpreter
+    # yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqllite-devel readline-devel tk-devel
+
+  7c) Add the Princeton University and the Institute for Advanced Study (PUIAS) repository to your mirrorlist to install python3.
+    i. Download the rpm gpg key
+      # cd /etc/pki/rpm-gpg
+      # wget -q http://springdale.math.ias.edu/data/puias/6/x86_64/os/RPM-GPG-KEY-puias
+      # rpm -import RPM-GPG-KEY-puias
+    ii. Create the repository file as /etc/yum.repos.d/puias-computational.repo
+      # cd /etc/yum.repos.d
+      # touch puias-computational.repo
+      # editor(vim, nano, etc) puias-computational.repo
+      [PUIAS_6_computational]
+      name=PUIAS computational BASE $releasever - $basearch 
+      mirrorlist=http://puias.math.ias.edu/data/puias/computational/$releasever/$basearch/mirrorlist
+      #baseurl=http://puias.math.ias.edu/data/puias/computational/$releasever/$basearch
+      gpgcheck=1
+      gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-puias
+
+  7d) Search for python3 in your repo.  
+    # yum search python3
+
+  7e) Install python3 if it is returned after the search.
+    # yum install python3
+
+8) Install Distribute to allow python modules to be installed
+  8a) Download Distribute source code.
+    # wget http://pypi.python.org/packages/source/d/distribute/distribute-0.6.35.tar.gz
+
+  8b) Extract and Install
+    # tar -xzvf distribute-0.6.35.tar.gz
+    # cd distribute-0.6.35
+    # python3 setup.py make && python3 setup.py install
+
+9) Install the lxml python module that is needed by checkbox
+  9a) Install lxml dependencies
+    # yum install libxml2-devel libxslt-devel
+ 
+  9b) Install module
+    # easy_install-3.3 lxml
+
+10) Install the checkbox*.rpm files in the directory they were stored in.
+  # rpm -Uvh checkbox*.rpm
+
+11) Copy the checkbox files from /usr/lib/python3/dist-packages into /usr/lib/python3.3/site-packages/ or else checkbox won't run.
+  # cp -r /usr/lib/python3/dist-packages/checkbox* /usr/lib/python3.3/site-packages/
+
+12) Run checkbox at the terminal with the following command
+  # checkbox-cli
+
