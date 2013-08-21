@@ -1,4 +1,12 @@
-checkbox (0.16.6~OCP) UNRELEASED; urgency=low
+checkbox (1.16.6~OCP) UNRELEASED; urgency=low
+
+  [ Jeff Marcom ]
+  * Added checkbox-ocp package
+
+ -- Jeff Marcom <jeff.marcom@canonical.com>  Wed, 21 Aug 2013 12:20:24 -0400
+
+
+checkbox (0.16.6~OCPubuntu1) UNRELEASED; urgency=low
 
   * INITIAL RELEASE:
     based on checkbox 0.16.6 from lp:checkbox with modificiations specific to
@@ -17,4 +25,3 @@ checkbox (0.16.6~OCP) UNRELEASED; urgency=low
     checkbox/tests/ - Cleaned up unit tests that were looking for things
     removed in this merge.
 
- -- Jeff Marcom <jeff.marcom@canonical.com>  Wed, 31 Jul 2013 19:36:52 -0400
