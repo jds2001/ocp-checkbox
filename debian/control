@@ -47,7 +47,7 @@ Recommends: dpkg (>= 1.13),
             python3-gi
 Suggests: bonnie++,
           bootchart,
-          checkbox-cli | checkbox-gtk,
+          checkbox-cli | checkbox-ocp, checkbox-gtk,
           curl,
           ethtool,
           fwts,
@@ -77,6 +77,15 @@ Depends: checkbox (>= ${source:Version}), ${misc:Depends}
 Description: Command line interface for checkbox
  This project provides an extensible interface for system testing. The
  results can then be sent to Launchpad.
+ .
+ This package provides a command line interface for answering tests.
+
+Package: checkbox-ocp
+Architecture: all
+Depends: checkbox (>= ${source:Version}), ${misc:Depends}
+Description: Command line interface of checkbox for the Open Compute Project
+ This project provides an extensible interface for system testing on
+ Open Compute platforms.
  .
  This package provides a command line interface for answering tests.
 
