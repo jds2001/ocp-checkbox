@@ -15,7 +15,7 @@ Note: Following steps are on an Ubuntu system.
   # apt-get install alien
 
 5) Convert the .deb packages into .rpm packages using the following command:
-  alien -r package_name.deb -scripts 
+  alien -r package_name.deb --scripts 
 
 6) Transfer the checkbox*.rpm files to the CentOS 6.4 machine.
 
@@ -31,7 +31,7 @@ Note: Following steps are on a CentOS 6.4 system.
     i. Download the rpm gpg key
       # cd /etc/pki/rpm-gpg
       # wget -q http://springdale.math.ias.edu/data/puias/6/x86_64/os/RPM-GPG-KEY-puias
-      # rpm -import RPM-GPG-KEY-puias
+      # rpm --import RPM-GPG-KEY-puias
     ii. Create the repository file as /etc/yum.repos.d/puias-computational.repo
       # cd /etc/yum.repos.d
       # touch puias-computational.repo
@@ -56,7 +56,7 @@ Note: Following steps are on a CentOS 6.4 system.
   8b) Extract and Install
     # tar -xzvf distribute-0.6.35.tar.gz
     # cd distribute-0.6.35
-    # python3 setup.py make && python3 setup.py install
+    # python3 setup.py build && python3 setup.py install
 
 9) Install the lxml python module that is needed by checkbox
   9a) Install lxml dependencies
@@ -72,5 +72,5 @@ Note: Following steps are on a CentOS 6.4 system.
   # cp -r /usr/lib/python3/dist-packages/checkbox* /usr/lib/python3.3/site-packages/
 
 12) Run checkbox at the terminal with the following command
-  # checkbox-cli
+  # checkbox-ocp
 

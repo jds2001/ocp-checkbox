@@ -6,7 +6,7 @@ export CHECKBOX_SHARE=${CHECKBOX_SHARE:-.}
 export CHECKBOX_OPTIONS=${CHECKBOX_OPTIONS:---whitelist-file=$CHECKBOX_SHARE/data/whitelists/opencompute-ready-local.whitelist}
 export PYTHONPATH=$PYTHONPATH:$CHECKBOX_SHARE
 
-if [ ! -S /etc/checkbox.d/configs ]
+if [ ! -s /etc/checkbox.d/configs ]
 then ln -s /usr/share/checkbox/examples /etc/checkbox.d/configs
 fi
 
