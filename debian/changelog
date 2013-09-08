@@ -1,3 +1,11 @@
+
+checkbox (1.16.11~OCP) UNRELEASED; urgency=low
+
+  [ Jeff Lane ]
+  * Updated OCP Checkbox to latest checkbox trunk, 0.16.11 revno 2353
+
+ -- Jeff Lane <jeffrey.lane@canonical.com>  Sat, 7 Sep 2013 12:20:24 -0400
+
 checkbox (1.16.6~OCP) UNRELEASED; urgency=low
 
   [ Jeff Marcom ]
