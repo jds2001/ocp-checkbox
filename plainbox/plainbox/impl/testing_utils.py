@@ -26,13 +26,27 @@
     THIS MODULE DOES NOT HAVE STABLE PUBLIC API
 """
 
-import inspect
+from functools import wraps
+from gzip import GzipFile
+from io import TextIOWrapper
+from mock import Mock
 from tempfile import NamedTemporaryFile
+import inspect
+import warnings
 
 from plainbox.impl.job import JobDefinition
-from plainbox.impl.result import JobResult
+from plainbox.impl.result import IOLogRecordWriter
+from plainbox.impl.result import MemoryJobResult
 from plainbox.impl.rfc822 import Origin
-from plainbox.impl.runner import io_log_write
+
+
+def MockJobDefinition(name, *args, **kwargs):
+    """
+    Mock for JobDefinition class
+    """
+    job = Mock(*args, spec_set=JobDefinition, **kwargs)
+    job.name = name
+    return job
 
 
 def make_io_log(io_log, io_log_dir):
@@ -40,9 +54,14 @@ def make_io_log(io_log, io_log_dir):
     Make the io logs serialization to json and return the saved file pathname
     WARNING: The caller has to remove the file once done with it!
     """
-    with NamedTemporaryFile(mode='w+t', delete=False) as stream:
-        io_log_write(io_log, stream)
-        return stream.name
+    with NamedTemporaryFile(
+        delete=False, suffix='.record.gz', dir=io_log_dir) as byte_stream, \
+            GzipFile(fileobj=byte_stream, mode='wb') as gzip_stream, \
+            TextIOWrapper(gzip_stream, encoding='UTF-8') as text_stream:
+        writer = IOLogRecordWriter(text_stream)
+        for record in io_log:
+            writer.write_record(record)
+    return byte_stream.name
 
 
 def make_job(name, plugin="dummy", requires=None, depends=None, **kwargs):
@@ -67,21 +86,36 @@ def make_job(name, plugin="dummy", requires=None, depends=None, **kwargs):
         # As recommended by the python documentation:
         # http://docs.python.org/3/library/inspect.html#the-interpreter-stack
         del caller_frame
-    settings = {
-        'name': name,
-        'plugin': plugin,
-        'requires': requires,
-        'depends': depends
-    }
-    settings.update(kwargs)
-    return JobDefinition(settings, origin)
+    # Carefully add additional data into the job definition so that we
+    # don't add any spurious None-valued keys that change the checksum.
+    data = {'name': name}
+    if plugin is not None:
+        data['plugin'] = plugin
+    if requires is not None:
+        data['requires'] = requires
+    if depends is not None:
+        data['depends'] = depends
+    # Add any custom key-value properties
+    data.update(kwargs)
+    return JobDefinition(data, origin)
 
 
-def make_job_result(job, outcome="dummy"):
+def make_job_result(outcome="dummy"):
     """
     Make and return a dummy JobResult instance
     """
-    return JobResult({
-        'job': job,
+    return MemoryJobResult({
         'outcome': outcome
     })
+
+
+def suppress_warnings(func):
+    """
+    Suppress all warnings from the decorated function
+    """
+    @wraps(func)
+    def decorator(*args, **kwargs):
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            return func(*args, **kwargs)
+    return decorator

@@ -32,7 +32,7 @@ import mock
 
 from plainbox.impl.applogic import PlainBoxConfig
 from plainbox.impl.commands.script import ScriptInvocation, ScriptCommand
-from plainbox.impl.provider import DummyProvider1
+from plainbox.impl.providers.v1 import DummyProvider1
 from plainbox.impl.testing_utils import make_job
 from plainbox.testing_utils.io import TestIO
 
@@ -42,17 +42,17 @@ class TestScriptCommand(TestCase):
     def setUp(self):
         self.parser = argparse.ArgumentParser(prog='test')
         self.subparsers = self.parser.add_subparsers()
-        self.checkbox = mock.Mock()
+        self.provider = mock.Mock()
         self.config = mock.Mock()
         self.ns = mock.Mock()
 
     def test_init(self):
-        script_cmd = ScriptCommand(self.checkbox, self.config)
-        self.assertIs(script_cmd.checkbox, self.checkbox)
+        script_cmd = ScriptCommand(self.provider, self.config)
+        self.assertIs(script_cmd.provider, self.provider)
         self.assertIs(script_cmd.config, self.config)
 
     def test_register_parser(self):
-        ScriptCommand(self.checkbox, self.config).register_parser(
+        ScriptCommand(self.provider, self.config).register_parser(
             self.subparsers)
         with TestIO() as io:
             self.parser.print_help()
@@ -75,26 +75,26 @@ class TestScriptCommand(TestCase):
 
     @mock.patch("plainbox.impl.commands.script.ScriptInvocation")
     def test_invoked(self, patched_ScriptInvocation):
-        retval = ScriptCommand(self.checkbox, self.config).invoked(self.ns)
+        retval = ScriptCommand(self.provider, self.config).invoked(self.ns)
         patched_ScriptInvocation.assert_called_once_with(
-            self.checkbox, self.config, self.ns.job_name)
+            self.provider, self.config, self.ns.job_name)
         self.assertEqual(
             retval, patched_ScriptInvocation(
-                self.checkbox, self.config,
+                self.provider, self.config,
                 self.ns.job_name).run.return_value)
 
 
 class ScriptInvocationTests(TestCase):
 
     def setUp(self):
-        self.checkbox = mock.Mock()
+        self.provider = mock.Mock()
         self.config = PlainBoxConfig()
         self.job_name = mock.Mock()
 
     def test_init(self):
         script_inv = ScriptInvocation(
-            self.checkbox, self.config, self.job_name)
-        self.assertIs(script_inv.checkbox, self.checkbox)
+            self.provider, self.config, self.job_name)
+        self.assertIs(script_inv.provider, self.provider)
         self.assertIs(script_inv.config, self.config)
         self.assertIs(script_inv.job_name, self.job_name)
 
@@ -124,22 +124,27 @@ class ScriptInvocationTests(TestCase):
         self.assertEqual(retval, 125)
 
     def test_job_with_command(self):
+        dummy_name = 'foo'
+        dummy_command = 'echo ok'
         provider = DummyProvider1([
-            make_job('foo', command='echo ok')])
-        script_inv = ScriptInvocation(provider, self.config, 'foo')
+            make_job(dummy_name, command=dummy_command)])
+        script_inv = ScriptInvocation(provider, self.config, dummy_name)
         with TestIO() as io:
             retval = script_inv.run()
         self.assertEqual(
             io.stdout, cleandoc(
                 """
                 (job foo, <stdout:00001>) ok
-                """) + '\n')
+                """) + '\n' + "{} returned 0\n".format(dummy_name) +
+                "command: {}\n".format(dummy_command))
         self.assertEqual(retval, 0)
 
     def test_job_with_command_making_files(self):
+        dummy_name = 'foo'
+        dummy_command = 'echo ok > file'
         provider = DummyProvider1([
-            make_job('foo', command='echo ok > file')])
-        script_inv = ScriptInvocation(provider, self.config, 'foo')
+            make_job(dummy_name, command=dummy_command)])
+        script_inv = ScriptInvocation(provider, self.config, dummy_name)
         with TestIO() as io:
             retval = script_inv.run()
         self.maxDiff = None
@@ -148,5 +153,6 @@ class ScriptInvocationTests(TestCase):
                 """
                 Leftover file detected: 'files-created-in-current-dir/file':
                   files-created-in-current-dir/file:1: ok
-                """) + '\n')
+                """) + '\n' + "{} returned 0\n".format(dummy_name) +
+                "command: {}\n".format(dummy_command))
         self.assertEqual(retval, 0)

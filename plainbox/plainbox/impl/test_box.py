@@ -31,7 +31,7 @@ from unittest import TestCase
 from plainbox import __version__ as version
 from plainbox.impl.box import main
 from plainbox.impl.commands.checkbox import CheckBoxInvocationMixIn
-from plainbox.impl.mock_job import MockJobDefinition
+from plainbox.impl.testing_utils import MockJobDefinition, suppress_warnings
 from plainbox.testing_utils.io import TestIO
 
 
@@ -40,6 +40,7 @@ class MiscTests(TestCase):
     def setUp(self):
         self.job_foo = MockJobDefinition(name='foo')
         self.job_bar = MockJobDefinition(name='bar')
+        self.job_baz = MockJobDefinition(name='baz')
         self.obj = CheckBoxInvocationMixIn(Mock(name="checkbox"))
 
     def test_matching_job_list(self):
@@ -77,13 +78,28 @@ class MiscTests(TestCase):
         # that are read and interpreted as usual
         whitelist = Mock()
         whitelist.readlines.return_value = ['foo']
+        whitelists = [whitelist]
         ns = Mock()
-        ns.whitelist = whitelist
+        ns.whitelist = whitelists
         ns.include_pattern_list = []
         ns.exclude_pattern_list = []
         observed = self.obj._get_matching_job_list(ns, [
             self.job_foo, self.job_bar])
         self.assertEqual(observed, [self.job_foo])
+
+    def test_matching_job_list_multiple_whitelists(self):
+        whitelist_a = Mock()
+        whitelist_a.readlines.return_value = ['foo']
+        whitelist_b = Mock()
+        whitelist_b.readlines.return_value = ['baz']
+        whitelists = [whitelist_a, whitelist_b]
+        ns = Mock()
+        ns.whitelist = whitelists
+        ns.include_pattern_list = []
+        ns.exclude_pattern_list = []
+        observed = self.obj._get_matching_job_list(ns, [
+            self.job_foo, self.job_bar, self.job_baz])
+        self.assertEqual(observed, [self.job_foo, self.job_baz])
 
     def test_no_prefix_matching_including(self):
         # Include patterns should only match whole job name
@@ -115,6 +131,10 @@ class TestMain(TestCase):
             self.assertEqual(call.exception.args, (0,))
         self.assertEqual(io.combined, "{}.{}.{}\n".format(*version[:3]))
 
+    @suppress_warnings
+    # Temporarily supress warnings (i.e. ResourceWarning) to work around
+    # Issue #341 in distribute (< 0.6.33).
+    # See: https://bitbucket.org/tarek/distribute/issue/341
     def test_help(self):
         with TestIO(combined=True) as io:
             with self.assertRaises(SystemExit) as call:
@@ -122,22 +142,23 @@ class TestMain(TestCase):
         self.assertEqual(call.exception.args, (0,))
         self.maxDiff = None
         expected = """
-        usage: plainbox [-h] [--version] [-c {src,deb,auto}] [-v] [-D] [-C]
+        usage: plainbox [-h] [--version] [-c {src,deb,auto,stub,ihv}] [-v] [-D] [-C]
                         [-T LOGGER] [-P] [-I]
-                        {run,self-test,sru,check-config,dev} ...
+                        {run,self-test,sru,check-config,dev,service} ...
 
         positional arguments:
-          {run,self-test,sru,check-config,dev}
+          {run,self-test,sru,check-config,dev,service}
             run                 run a test job
             self-test           run integration tests
             sru                 run automated stable release update tests
             check-config        check and display plainbox configuration
             dev                 development commands
+            service             spawn dbus service
 
         optional arguments:
           -h, --help            show this help message and exit
           --version             show program's version number and exit
-          -c {src,deb,auto}, --checkbox {src,deb,auto}
+          -c {src,deb,auto,stub,ihv}, --checkbox {src,deb,auto,stub,ihv}
                                 where to find the installation of CheckBox.
 
         logging and debugging:
@@ -160,9 +181,9 @@ class TestMain(TestCase):
                 main([])
             self.assertEqual(call.exception.args, (2,))
         expected = """
-        usage: plainbox [-h] [--version] [-c {src,deb,auto}] [-v] [-D] [-C]
+        usage: plainbox [-h] [--version] [-c {src,deb,auto,stub,ihv}] [-v] [-D] [-C]
                         [-T LOGGER] [-P] [-I]
-                        {run,self-test,sru,check-config,dev} ...
+                        {run,self-test,sru,check-config,dev,service} ...
         plainbox: error: too few arguments
         """
         self.assertEqual(io.combined, cleandoc(expected) + "\n")

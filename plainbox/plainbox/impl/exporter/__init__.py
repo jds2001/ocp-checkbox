@@ -148,6 +148,9 @@ class SessionStateExporterBase(metaclass=ABCMeta):
                 continue
             data['result_map'][job_name] = OrderedDict()
             data['result_map'][job_name]['outcome'] = job_state.result.outcome
+            if job_state.result.execution_duration:
+                data['result_map'][job_name]['execution_duration'] = \
+                    job_state.result.execution_duration
             if self.OPTION_WITH_COMMENTS in self._option_list:
                 data['result_map'][job_name]['comments'] = \
                     job_state.result.comments
@@ -155,12 +158,12 @@ class SessionStateExporterBase(metaclass=ABCMeta):
             # Add Parent hash if requested
             if self.OPTION_WITH_JOB_VIA in self._option_list:
                 data['result_map'][job_name]['via'] = \
-                    job_state.result.job.via
+                    job_state.job.via
 
             # Add Job hash if requested
             if self.OPTION_WITH_JOB_HASH in self._option_list:
                 data['result_map'][job_name]['hash'] = \
-                    job_state.result.job.get_checksum()
+                    job_state.job.get_checksum()
 
             # Add Job definitions if requested
             if self.OPTION_WITH_JOB_DEFS in self._option_list:
@@ -170,17 +173,17 @@ class SessionStateExporterBase(metaclass=ABCMeta):
                              'command',
                              'description',
                              ):
-                    if not getattr(job_state.result.job, prop):
+                    if not getattr(job_state.job, prop):
                         continue
                     data['result_map'][job_name][prop] = getattr(
-                        job_state.result.job, prop)
+                        job_state.job, prop)
 
             # Add Attachments if requested
-            if job_state.result.job.plugin == 'attachment':
+            if job_state.job.plugin == 'attachment':
                 if self.OPTION_WITH_ATTACHMENTS in self._option_list:
                     raw_bytes = b''.join(
                         (record[2] for record in
-                         job_state.result.io_log if record[1] == 'stdout'))
+                         job_state.result.get_io_log() if record[1] == 'stdout'))
                     data['attachment_map'][job_name] = \
                         base64.standard_b64encode(raw_bytes).decode('ASCII')
                 continue  # Don't add attachments IO logs to the result_map
@@ -191,12 +194,12 @@ class SessionStateExporterBase(metaclass=ABCMeta):
                 # saved, discarding stream name and the relative timestamp.
                 if self.OPTION_SQUASH_IO_LOG in self._option_list:
                     io_log_data = self._squash_io_log(
-                        job_state.result.io_log)
+                        job_state.result.get_io_log())
                 elif self.OPTION_FLATTEN_IO_LOG in self._option_list:
                     io_log_data = self._flatten_io_log(
-                        job_state.result.io_log)
+                        job_state.result.get_io_log())
                 else:
-                    io_log_data = self._io_log(job_state.result.io_log)
+                    io_log_data = self._io_log(job_state.result.get_io_log())
                 data['result_map'][job_name]['io_log'] = io_log_data
         return data
 
@@ -288,8 +291,10 @@ def get_all_exporters():
     for entry_point in sorted(iterator, key=lambda ep: ep.name):
         try:
             exporter_cls = entry_point.load()
+        except pkg_resources.DistributionNotFound as exc:
+            logger.info("Unable to load %s: %s", entry_point, exc)
         except ImportError as exc:
-            logger.exception("Unable to import {}: {}", entry_point, exc)
+            logger.exception("Unable to import %s: %s", entry_point, exc)
         else:
             exporter_map[entry_point.name] = exporter_cls
     return exporter_map

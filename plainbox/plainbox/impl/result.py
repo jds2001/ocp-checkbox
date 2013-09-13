@@ -21,18 +21,20 @@
 :mod:`plainbox.impl.result` -- job result
 =========================================
 
-.. warning::
-
-    THIS MODULE DOES NOT HAVE STABLE PUBLIC API
+This module has two basic implementation of :class:`IJobResult`:
+:class:`MemoryJobResult` and :class:`DiskJobResult`.
 """
 
 from collections import namedtuple
 import base64
+import gzip
+import io
 import json
 import logging
-import os
+import inspect
 
 from plainbox.abc import IJobResult
+from plainbox.impl.signal import Signal
 
 logger = logging.getLogger("plainbox.result")
 
@@ -50,117 +52,220 @@ logger = logging.getLogger("plainbox.result")
 IOLogRecord = namedtuple("IOLogRecord", "delay stream_name data".split())
 
 
-class JobResult(IJobResult):
+class _JobResultBase(IJobResult):
     """
-    Result of running a JobDefinition.
+    Base class for :`IJobResult` implementations.
+
+    This class defines base properties common to all variants of `IJobResult`
     """
-
-    # The outcome of a job is a one-word classification how how it ran.  There
-    # are several values that were not used in the original implementation but
-    # their existence helps to organize and implement plainbox. They are
-    # discussed below to make their intended meaning more detailed than is
-    # possible from the variable name alone.
-    #
-    # The None outcome - a job that basically did not run at all.
-    OUTCOME_NONE = None
-    # The pass and fail outcomes are the two most essential, and externally
-    # visible, job outcomes. They can be provided by either automated or manual
-    # "classifier" - a script or a person that clicks a "pass" or "fail"
-    # button.
-    OUTCOME_PASS = 'pass'
-    OUTCOME_FAIL = 'fail'
-    # The skip outcome is used when the operator selected a job but then
-    # skipped it. This is typically used for a manual job that is tedious or
-    # was selected by accident.
-    OUTCOME_SKIP = 'skip'
-    # The not supported outcome is used when a job was about to run but a
-    # dependency or resource requirement prevent it from running.  XXX: perhaps
-    # this should be called "not available", not supported has the "unsupported
-    # code" feeling associated with it.
-    OUTCOME_NOT_SUPPORTED = 'not-supported'
-    # A temporary state that should be removed later on, used to indicate that
-    # job runner is not implemented but the job "ran" so to speak.
-    OUTCOME_NOT_IMPLEMENTED = 'not-implemented'
-
-    # XXX: how to support attachments?
 
     def __init__(self, data):
         """
         Initialize a new result with the specified data
+
+        Data is a dictionary that can hold arbitrary values. At least some
+        values are explicitly used, such as 'outcome', 'comments' and
+        'return_code' but all of those are optional.
         """
-        # XXX: consider moving job to a dedicated field as we want to serialize
-        # results without putting the job reference in there (a job name would
-        # be a fine substitute). It would also make the 'job is required'
-        # requirement spelled out below explicit)
-        #
-        # TODO: Do some basic validation, at least 'job' must be set.
         self._data = data
 
     def __str__(self):
-        return "{}: {}".format(
-            self.job.name, self.outcome)
+        return str(self.outcome)
 
     def __repr__(self):
-        return "<{} job:{!r} outcome:{!r}>".format(
-            self.__class__.__name__, self.job, self.outcome)
+        return "<{} outcome:{!r}>".format(
+            self.__class__.__name__, self.outcome)
 
-    @property
-    def job(self):
-        return self._data['job']
+    @Signal.define
+    def on_outcome_changed(self, old, new):
+        """
+        Signal sent when ``outcome`` property value is changed
+        """
 
     @property
     def outcome(self):
+        """
+        outcome of running this job.
+
+        The outcome ultimately classifies jobs (tests) as failures or
+        successes.  There are several other types of outcome that all basically
+        mean that the job did not run for some particular reason.
+        """
         return self._data.get('outcome', self.OUTCOME_NONE)
+
+    @outcome.setter
+    def outcome(self, new):
+        old = self.outcome
+        if old != new:
+            self._data['outcome'] = new
+            self.on_outcome_changed(old, new)
+
+    @property
+    def execution_duration(self):
+        """
+        The amount of time in seconds it took to run this
+        jobs command.
+        """
+        return self._data.get('execution_duration')
 
     @property
     def comments(self):
+        """
+        comments of the test operator
+        """
         return self._data.get('comments')
 
-    @property
-    def io_log(self):
-        if os.path.exists(self._data.get('io_log', '')):
-            with open(self._data.get('io_log')) as f:
-                return json.load(f, cls=IoLogDecoder)
-        else:
-            return ()
+    @comments.setter
+    def comments(self, new):
+        old = self.comments
+        if old != new:
+            self._data['comments'] = new
+            self.on_comments_changed(old, new)
+
+    @Signal.define
+    def on_comments_changed(self, old, new):
+        """
+        Signal sent when ``comments`` property value is changed
+        """
 
     @property
     def return_code(self):
+        """
+        return code of the command associated with the job, if any
+        """
         return self._data.get('return_code')
 
-    def _get_persistance_subset(self):
-        state = {}
-        state['data'] = {}
-        for key, value in self._data.items():
-            state['data'][key] = value
-        return state
+    @property
+    def io_log(self):
+        return tuple(self.get_io_log())
 
-    @classmethod
-    def from_json_record(cls, record):
+
+class MemoryJobResult(_JobResultBase):
+    """
+    A :class:`IJobResult` that keeps IO logs in memory.
+
+    This type of JobResult is indented for writing unit tests where the hassle
+    of going through the filesystem would make them needlessly complicated.
+    """
+
+    def get_io_log(self):
+        io_log_data = self._data.get('io_log', ())
+        for entry in io_log_data:
+            if isinstance(entry, IOLogRecord):
+                yield entry
+            elif isinstance(entry, tuple):
+                yield IOLogRecord(*entry)
+            else:
+                raise TypeError(
+                    "each item in io_log must be either a tuple"
+                    " or special the IOLogRecord tuple")
+
+
+class GzipFile(gzip.GzipFile):
+    """
+    Subclass of GzipFile that works around missing read1() on python3.2
+
+    See: http://bugs.python.org/issue10791
+    """
+
+    def read1(self, n):
+        return self.read(n)
+
+
+class DiskJobResult(_JobResultBase):
+    """
+    A :class:`IJobResult` that keeps IO logs on disk.
+
+    This type of JobResult is intended for working with most results. It does
+    not store IO logs in memory so it is scalable to arbitrary IO log sizes.
+    Each instance just knows where the log file is located (using the
+    'io_log_filename' attribute for that) and offers streaming API for
+    accessing particular parts of the log.
+    """
+
+    @property
+    def io_log_filename(self):
         """
-        Create a JobResult instance from JSON record
+        pathname of the file containing serialized IO log records
         """
-        return cls(record['data'])
+        return self._data.get("io_log_filename")
+
+    def get_io_log(self):
+        record_path = self.io_log_filename
+        if record_path:
+            with GzipFile(record_path, mode='rb') as gzip_stream, \
+                    io.TextIOWrapper(gzip_stream, encoding='UTF-8') as stream:
+                for record in IOLogRecordReader(stream):
+                    yield record
+
+    @property
+    def io_log(self):
+        caller_frame, filename, lineno = inspect.stack(0)[1][:3]
+        logger.warning(
+            "Expensive DiskJobResult.io_log property access from %s:%d",
+            filename, lineno)
+        return super(DiskJobResult, self).io_log
 
 
-class IoLogEncoder(json.JSONEncoder):
+class IOLogRecordWriter:
     """
-    JSON Serialize helper to encode binary io logs
+    Class for writing :class:`IOLogRecord` instances to a text stream
     """
 
-    def default(self, obj):
-        return base64.standard_b64encode(obj).decode('ASCII')
+    def __init__(self, stream):
+        self.stream = stream
+
+    def close(self):
+        self.stream.close()
+
+    def write_record(self, record):
+        """
+        Write an :class:`IOLogRecord` to the stream.
+        """
+        text = json.dumps([
+            record[0], record[1],
+            base64.standard_b64encode(record[2]).decode("ASCII")],
+            check_circular=False, ensure_ascii=True, indent=None,
+            separators=(',', ':'))
+        logger.debug("Encoded %r into string %r", record, text)
+        assert "\n" not in text
+        self.stream.write(text)
+        self.stream.write('\n')
 
 
-class IoLogDecoder(json.JSONDecoder):
+class IOLogRecordReader:
     """
-    JSON Decoder helper for io logs objects
+    Class for streaming :class`IOLogRecord` instances from a text stream
     """
 
-    def decode(self, obj):
-        return tuple([IOLogRecord(
-            # io logs namedtuple are recorded as list in json, using _asdict()
-            # would require too much space for little benefit.
-            # IOLogRecord are re created using the list ordering
-            log[0], log[1], base64.standard_b64decode(log[2].encode('ASCII')))
-            for log in super().decode(obj)])
+    def __init__(self, stream):
+        self.stream = stream
+
+    def close(self):
+        self.stream.close()
+
+    def read_record(self):
+        """
+        Read the next record from the stream.
+
+        :returns: None if the stream is empty
+        :returns: next :class:`IOLogRecord` as found in the stream.
+        """
+        text = self.stream.readline()
+        if len(text) == 0:
+            return
+        data = json.loads(text)
+        return IOLogRecord(
+            data[0], data[1],
+            base64.standard_b64decode(data[2].encode("ASCII")))
+
+    def __iter__(self):
+        """
+        Iterate over the entire stream generating subsequent
+        :class:`IOLogRecord` entries.
+        """
+        while True:
+            record = self.read_record()
+            if record is None:
+                break
+            yield record

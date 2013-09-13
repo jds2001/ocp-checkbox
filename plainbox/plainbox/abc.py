@@ -114,13 +114,46 @@ class IJobResult(metaclass=ABCMeta):
     # XXX: We could also store stuff like job duration and other meta-data but
     # I wanted to avoid polluting this proposal with mundane details
 
-    @abstractproperty
-    def job(self):
-        """
-        Definition of the job
+    # The outcome of a job is a one-word classification how how it ran.  There
+    # are several values that were not used in the original implementation but
+    # their existence helps to organize and implement plainbox. They are
+    # discussed below to make their intended meaning more detailed than is
+    # possible from the variable name alone.
+    #
+    # The None outcome - a job that basically did not run at all.
+    OUTCOME_NONE = None
+    # The pass and fail outcomes are the two most essential, and externally
+    # visible, job outcomes. They can be provided by either automated or manual
+    # "classifier" - a script or a person that clicks a "pass" or "fail"
+    # button.
+    OUTCOME_PASS = 'pass'
+    OUTCOME_FAIL = 'fail'
+    # The skip outcome is used when the operator selected a job but then
+    # skipped it. This is typically used for a manual job that is tedious or
+    # was selected by accident.
+    OUTCOME_SKIP = 'skip'
+    # The not supported outcome is used when a job was about to run but a
+    # dependency or resource requirement prevent it from running.  XXX: perhaps
+    # this should be called "not available", not supported has the "unsupported
+    # code" feeling associated with it.
+    OUTCOME_NOT_SUPPORTED = 'not-supported'
+    # A temporary state that should be removed later on, used to indicate that
+    # job runner is not implemented but the job "ran" so to speak.
+    OUTCOME_NOT_IMPLEMENTED = 'not-implemented'
+    # A temporary state before the user decides on the outcome of a manual
+    # job or any other job that requires manual verification
+    OUTCOME_UNDECIDED = 'undecided'
 
-        The object implements IJobDefinition
-        """
+    # List of all valid values of OUTCOME_xxx
+    ALL_OUTCOME_LIST = [
+        OUTCOME_NONE,
+        OUTCOME_PASS,
+        OUTCOME_FAIL,
+        OUTCOME_SKIP,
+        OUTCOME_NOT_SUPPORTED,
+        OUTCOME_NOT_IMPLEMENTED,
+        OUTCOME_UNDECIDED,
+    ]
 
     @abstractproperty
     def outcome(self):
@@ -203,4 +236,80 @@ class IUserInterfaceIO(metaclass=ABCMeta):
         Get the outcome of the manual verification, as according to the user
         May raise NotImplementedError if the user interface cannot provide this
         answer.
+        """
+
+
+class IProviderBackend1(metaclass=ABCMeta):
+    """
+    Provider for the current type of tests.
+
+    This class provides the APIs required by the internal implementation
+    that are not considered normal public APIs. The only consumer of the
+    those methods and properties are internal to plainbox.
+    """
+
+    @abstractproperty
+    def CHECKBOX_SHARE(self):
+        """
+        Return the required value of CHECKBOX_SHARE environment variable.
+
+        .. note::
+            This variable is only required by one script.
+            It would be nice to remove this later on.
+        """
+
+    @abstractproperty
+    def extra_PYTHONPATH(self):
+        """
+        Return additional entry for PYTHONPATH, if needed.
+
+        This entry is required for CheckBox scripts to import the correct
+        CheckBox python libraries.
+
+        .. note::
+            The result may be None
+        """
+
+    @abstractproperty
+    def extra_PATH(self):
+        """
+        Return additional entry for PATH
+
+        This entry is required to lookup CheckBox scripts.
+        """
+
+
+class IProvider1(metaclass=ABCMeta):
+    """
+    Provider for the current type of tests
+
+    Also known as the 'checkbox-like' provider.
+    """
+
+    @abstractproperty
+    def name(self):
+        """
+        name of this provider
+
+        This name should be dbus-friendly. It should not be localizable.
+        """
+
+    @abstractproperty
+    def description(self):
+        """
+        description of this providr
+
+        This name should be dbus-friendly. It should not be localizable.
+        """
+
+    @abstractmethod
+    def get_builtin_jobs(self):
+        """
+        Load all the built-in jobs and return them
+        """
+
+    @abstractmethod
+    def get_builtin_whitelists(self):
+        """
+        Load all the built-in whitelists and return them
         """

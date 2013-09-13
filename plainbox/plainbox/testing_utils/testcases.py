@@ -138,7 +138,6 @@ class TestCaseWithParameters(TestCase):
         Additional methods unique to unittest framework were implemented to
         convey the value of the parameter back to the user / developer. Those
         include id() and countTestCases()
-
     """
 
     def __init__(self, methodName="runTest", parameters=None):
@@ -222,7 +221,12 @@ class TestCaseWithParameters(TestCase):
         # Get the list of parameter names
         names = self.get_parameter_names()
         # For each list of parameter values:
-        for values in self.get_parameter_values():
+        for iteration_index, values in enumerate(self.get_parameter_values()):
+            if len(values) != len(names):
+                raise RuntimeError((
+                    "incorrect get_parameter_values() or parameter_values for"
+                    " iteration {}. Expected to see {} item but saw {} instead"
+                ).format(iteration_index, len(names), len(values)))
             # Construct the parameter placeholder
             parameters = TestCaseParameters(names, values)
             # Construct a parametrized version of this test case
