@@ -30,6 +30,7 @@ Implementation of rfc822 serializer and deserializer.
 
 import logging
 
+from functools import total_ordering
 from inspect import cleandoc
 
 from plainbox.impl.secure.checkbox_trusted_launcher import RFC822SyntaxError
@@ -37,7 +38,7 @@ from plainbox.impl.secure.checkbox_trusted_launcher import BaseRFC822Record
 
 logger = logging.getLogger("plainbox.rfc822")
 
-
+@total_ordering
 class Origin:
     """
     Simple class for tracking where something came from
@@ -63,6 +64,14 @@ class Origin:
     def __str__(self):
         return "{}:{}-{}".format(
             self.filename, self.line_start, self.line_end)
+
+    def __eq__(self, other):
+        return (self.filename, self.line_start, self.line_end) == \
+               (other.filename, other.line_start, other.line_end)
+
+    def __gt__(self, other):
+        return (self.filename, self.line_start, self.line_end) > \
+               (other.filename, other.line_start, other.line_end)
 
 
 class RFC822Record(BaseRFC822Record):
@@ -148,7 +157,8 @@ def gen_rfc822_records(stream, data_cls=dict):
             filename = stream.name
         except AttributeError:
             filename = None
-        origin = Origin(filename, None, None)
+        if filename:
+            origin = Origin(filename, None, None)
         data = data_cls()
         record = RFC822Record(data, origin)
 
@@ -166,14 +176,15 @@ def gen_rfc822_records(stream, data_cls=dict):
         """
         Remember the line number of the record start unless already set
         """
-        if record.origin.line_start is None:
+        if origin and record.origin.line_start is None:
             record.origin.line_start = lineno
 
     def _update_end_lineno():
         """
         Update the line number of the record tail
         """
-        record.origin.line_end = lineno
+        if origin:
+            record.origin.line_end = lineno
 
     # Start with an empty record
     _new_record()

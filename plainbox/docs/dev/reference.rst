@@ -94,6 +94,11 @@ Code reference
     :undoc-members:
     :show-inheritance:
 
+.. automodule:: plainbox.impl.exporter.html
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 .. automodule:: plainbox.impl.secure
     :members:
     :undoc-members:
@@ -144,11 +149,6 @@ Code reference
     :undoc-members:
     :show-inheritance:
 
-.. automodule:: plainbox.impl.mock_job
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 .. automodule:: plainbox.impl.resource
     :members:
     :undoc-members:
@@ -169,6 +169,43 @@ Code reference
     :show-inheritance:
 
 .. automodule:: plainbox.impl.session
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+.. automodule:: plainbox.impl.session.state
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+.. automodule:: plainbox.impl.session.jobs
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+.. automodule:: plainbox.impl.session.storage
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+.. automodule:: plainbox.impl.session.suspend
+    :members:
+    :undoc-members:
+    :private-members:
+    :show-inheritance:
+
+.. automodule:: plainbox.impl.session.resume
+    :members:
+    :undoc-members:
+    :private-members:
+    :show-inheritance:
+
+.. automodule:: plainbox.impl.session.legacy
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+.. automodule:: plainbox.impl.session.manager
     :members:
     :undoc-members:
     :show-inheritance:

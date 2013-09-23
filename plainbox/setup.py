@@ -40,6 +40,9 @@ setup(
         'lxml >= 2.3',
         'requests >= 1.0',
     ],
+    extras_require={
+        'XLSX': 'XlsxWriter >= 0.3',
+    },
     entry_points={
         'console_scripts': [
             'plainbox=plainbox.public:main',
@@ -50,11 +53,20 @@ setup(
             'text=plainbox.impl.exporter.text:TextSessionStateExporter',
             'json=plainbox.impl.exporter.json:JSONSessionStateExporter',
             'rfc822=plainbox.impl.exporter.rfc822:RFC822SessionStateExporter',
+            'xlsx=plainbox.impl.exporter.xlsx:XLSXSessionStateExporter [XLSX]',
             'xml=plainbox.impl.exporter.xml:XMLSessionStateExporter',
+            'html=plainbox.impl.exporter.html:HTMLSessionStateExporter',
         ],
         'plainbox.transport': [
             'certification='
             'plainbox.impl.transport.certification:CertificationTransport',
+        ],
+        'plainbox.provider.v1': [
+            'checkbox-auto=plainbox.impl.providers.checkbox:CheckBoxAutoProvider',
+            'checkbox-src=plainbox.impl.providers.checkbox:CheckBoxSrcProvider',
+            'checkbox-deb=plainbox.impl.providers.checkbox:CheckBoxDebProvider',
+            'stubbox=plainbox.impl.providers.stubbox:StubBoxProvider',
+            'ihv=plainbox.impl.providers.special:IHVProvider',
         ],
     },
     include_package_data=True)

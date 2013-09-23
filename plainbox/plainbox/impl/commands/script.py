@@ -48,8 +48,8 @@ class ScriptInvocation(CheckBoxInvocationMixIn):
     the command is to be invoked.
     """
 
-    def __init__(self, checkbox, config, job_name):
-        self.checkbox = checkbox
+    def __init__(self, provider, config, job_name):
+        self.provider = provider
         self.config = config
         self.job_name = job_name
 
@@ -67,8 +67,10 @@ class ScriptInvocation(CheckBoxInvocationMixIn):
             bait_dir = os.path.join(scratch, 'files-created-in-current-dir')
             os.mkdir(bait_dir)
             with TestCwd(bait_dir):
-                return_code, fjson = runner._run_command(job, self.config)
+                return_code, record_path = runner._run_command(
+                    job, self.config)
             self._display_side_effects(scratch)
+            self._display_script_outcome(job, return_code)
         return return_code
 
     def _display_file(self, pathname, origin):
@@ -85,9 +87,13 @@ class ScriptInvocation(CheckBoxInvocationMixIn):
                 self._display_file(
                     os.path.join(dirpath, filename), scratch)
 
+    def _display_script_outcome(self, job, return_code):
+        print(job.name, "returned", return_code)
+        print("command:", job.command)
+
     def _get_job(self):
         job_list = get_matching_job_list(
-            self.checkbox.get_builtin_jobs(),
+            self.provider.get_builtin_jobs(),
             NameJobQualifier(self.job_name))
         if len(job_list) == 0:
             return None
@@ -101,12 +107,12 @@ class ScriptCommand(PlainBoxCommand):
     unconditionally.
     """
 
-    def __init__(self, checkbox, config):
-        self.checkbox = checkbox
+    def __init__(self, provider, config):
+        self.provider = provider
         self.config = config
 
     def invoked(self, ns):
-        return ScriptInvocation(self.checkbox, self.config, ns.job_name).run()
+        return ScriptInvocation(self.provider, self.config, ns.job_name).run()
 
     def register_parser(self, subparsers):
         parser = subparsers.add_parser(

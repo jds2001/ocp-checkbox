@@ -31,7 +31,7 @@ from logging import getLogger
 from plainbox.impl.commands import PlainBoxCommand
 from plainbox.impl.commands.checkbox import CheckBoxCommandMixIn
 from plainbox.impl.commands.checkbox import CheckBoxInvocationMixIn
-from plainbox.impl.session import SessionState
+from plainbox.impl.session import SessionStateLegacyAPI as SessionState
 from plainbox.impl.runner import JobRunner
 
 
@@ -40,8 +40,8 @@ logger = getLogger("plainbox.commands.special")
 
 class AnalyzeInvocation(CheckBoxInvocationMixIn):
 
-    def __init__(self, checkbox, ns):
-        super(AnalyzeInvocation, self).__init__(checkbox)
+    def __init__(self, provider, ns):
+        super(AnalyzeInvocation, self).__init__(provider)
         self.ns = ns
         self.job_list = self.get_job_list(ns)
         self.desired_job_list = self._get_matching_job_list(ns, self.job_list)
@@ -64,7 +64,7 @@ class AnalyzeInvocation(CheckBoxInvocationMixIn):
         with self.session.open():
             runner = JobRunner(
                 self.session.session_dir, self.session.jobs_io_log_dir,
-                command_io_delegate=self, outcome_callback=None)
+                command_io_delegate=self, interaction_callback=None)
             again = True
             while again:
                 for job in self.session.run_list:
@@ -127,11 +127,11 @@ class AnalyzeCommand(PlainBoxCommand, CheckBoxCommandMixIn):
     Implementation of ``$ plainbox dev analyze``
     """
 
-    def __init__(self, checkbox):
-        self.checkbox = checkbox
+    def __init__(self, provider):
+        self.provider = provider
 
     def invoked(self, ns):
-        return AnalyzeInvocation(self.checkbox, ns).run()
+        return AnalyzeInvocation(self.provider, ns).run()
 
     def register_parser(self, subparsers):
         parser = subparsers.add_parser(
