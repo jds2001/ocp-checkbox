@@ -133,30 +133,32 @@ name: stress/reboot
 requires:
  package.name == 'upstart'
  package.name == 'fwts'
-command: pm_test -r 100 --silent --log-level=notset reboot
+command: pm_test -r 100 --silent --log-level=notset reboot --log-dir=$CHECKBOX_DATA
 user: root
+environ: CHECKBOX_DATA
 _description:
  Stress reboot system (100 cycles)
 
 plugin: attachment
 name: stress/reboot_log
 depends: stress/reboot
-command: tar cvfz stress_reboot.tgz $CHECKBOX_DATA/*reboot.100.log && cat $CHECKBOX_DATA/stress_reboot.tgz
+command: tar cvfz $CHECKBOX_DATA/stress_reboot.tgz $CHECKBOX_DATA/*reboot.100.log && cat $CHECKBOX_DATA/stress_reboot.tgz
 
 plugin: shell
 name: stress/poweroff
 requires:
  package.name == 'upstart'
  package.name == 'fwts'
-command: pm_test -r 100 --silent --log-level=notset poweroff
+command: pm_test -r 100 --silent --log-level=notset poweroff --log-dir=$CHECKBOX_DATA
 user: root
+environ: CHECKBOX_DATA
 _description:
  Stress poweroff system (100 cycles)
 
 plugin: attachment
 name: stress/poweroff_log
 depends: stress/poweroff
-command: tar cvfz stress_poweroff.tgz $CHECKBOX_DATA/*poweroff.100.log && cat $CHECKBOX_DATA/stress_poweroff.tgz
+command: tar cvfz $CHECKBOX_DATA/stress_poweroff.tgz $CHECKBOX_DATA/*poweroff.100.log && cat $CHECKBOX_DATA/stress_poweroff.tgz
 
 plugin: shell
 name: stress/reboot_check
@@ -168,7 +170,7 @@ plugin: attachment
 name: stress/reboot_check_log
 depends: stress/reboot_check
 command:
- tar cvfz stress_reboot_check.tgz $CHECKBOX_DATA/pm_log_check_reboot.100.log && cat $CHECKBOX_DATA/stress_reboot_check.tgz
+ tar cvfz $CHECKBOX_DATA/stress_reboot_check.tgz $CHECKBOX_DATA/pm_log_check_reboot.100.log && cat $CHECKBOX_DATA/stress_reboot_check.tgz
 
 plugin: shell
 name: stress/poweroff_check
@@ -180,7 +182,7 @@ plugin: attachment
 name: stress/poweroff_check_log
 depends: stress/poweroff_check
 command:
- tar cvfz stress_poweroff_check.tgz $CHECKBOX_DATA/pm_log_check_poweroff.100.log && cat $CHECKBOX_DATA/stress_poweroff_check.tgz
+ tar cvfz $CHECKBOX_DATA/stress_poweroff_check.tgz $CHECKBOX_DATA/pm_log_check_poweroff.100.log && cat $CHECKBOX_DATA/stress_poweroff_check.tgz
 
 plugin: shell
 name: stress/graphics

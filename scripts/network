@@ -175,6 +175,9 @@ class FTPPerformanceTest(object):
                 return 30
 
             logging.debug("Passed benchmark")
+        else:
+            print("Failed sending file via ftp")
+            return 1
 
 
 class Interface(socket.socket):
@@ -305,7 +308,7 @@ def interface_test(args):
 
         if args.filesize:
             ftp_benchmark.binary_size = int(args.filesize)
-        return ftp_benchmark.run()
+        sys.exit(ftp_benchmark.run())
 
 
 def interface_info(args):
