@@ -47,7 +47,7 @@ Recommends: dpkg (>= 1.13),
             python3-gi
 Suggests: bonnie++,
           bootchart,
-          checkbox-cli | checkbox-ocp, checkbox-gtk,
+          checkbox-ocp-cli | checkbox-ocp-gtk,
           curl,
           ethtool,
           fwts,
@@ -71,16 +71,7 @@ Description: System testing application
  This project provides an extensible interface for system testing. The
  results can then be sent to Launchpad.
 
-Package: checkbox-cli
-Architecture: all
-Depends: checkbox (>= ${source:Version}), ${misc:Depends}
-Description: Command line interface for checkbox
- This project provides an extensible interface for system testing. The
- results can then be sent to Launchpad.
- .
- This package provides a command line interface for answering tests.
-
-Package: checkbox-ocp
+Package: checkbox-ocp-cli
 Architecture: all
 Depends: checkbox (>= ${source:Version}), ${misc:Depends}
 Description: Command line interface of checkbox for the Open Compute Project
@@ -89,17 +80,17 @@ Description: Command line interface of checkbox for the Open Compute Project
  .
  This package provides a command line interface for answering tests.
 
-Package: checkbox-urwid
+Package: checkbox-ocp-urwid
 Architecture: all
 Depends: checkbox (>= ${source:Version}), python3-urwid, ${misc:Depends}
-Description: Urwid interface for checkbox
+Description: Urwid interface for checkbox-ocp
  This project provides an extensible interface for system testing. The
  results can then be sent to Launchpad.
  .
  This package provides a command line interface (urwid version) for
  answering tests.
 
-Package: checkbox-gtk
+Package: checkbox-ocp-gtk
 Section: gnome
 Architecture: all
 Depends: checkbox (>= ${source:Version}),
@@ -107,13 +98,13 @@ Depends: checkbox (>= ${source:Version}),
          python3-gi,
          python3-gi-cairo,
          ${misc:Depends}
-Description: GTK interface for checkbox
+Description: GTK interface for checkbox-ocp
  This project provides an extensible interface for system testing. The
  results can then be sent to Launchpad.
  .
  This package provides a GTK interface for answering tests.
 
-Package: checkbox-qt
+Package: checkbox-ocp-qt
 Architecture: any
 Depends: checkbox (>= ${source:Version}),
          libqt4-dbus,
@@ -121,7 +112,7 @@ Depends: checkbox (>= ${source:Version}),
          python3-dbus,
          ${misc:Depends},
          ${shlibs:Depends}
-Description: QT4 interface for checkbox
+Description: QT4 interface for checkbox-ocp
  This project provides an extensible interface for system testing. The
  results can then be sent to Launchpad.
  .

@@ -24,26 +24,25 @@ ifeq (, $(findstring nocheck, $(DEB_BUILD_OPTIONS)))
 endif	
 
 override_dh_installdeb:
-	cp debian/checkbox.postrm debian/checkbox-cli.postrm
-	cp debian/checkbox.postrm debian/checkbox-ocp.postrm
-	cp debian/checkbox.postrm debian/checkbox-urwid.postrm
-	cp debian/checkbox.postrm debian/checkbox-gtk.postrm
-	cp debian/checkbox.postrm debian/checkbox-qt.postrm
+	cp debian/checkbox.postrm debian/checkbox-ocp-cli.postrm
+	cp debian/checkbox.postrm debian/.postrm
+	cp debian/checkbox.postrm debian/checkbox-ocp-urwid.postrm
+	cp debian/checkbox.postrm debian/checkbox-ocp-gtk.postrm
+	cp debian/checkbox.postrm debian/checkbox-ocp-qt.postrm
 	cp debian/checkbox.postrm debian/checkbox-hw-collection.postrm
 	dh_installdeb
 
 override_dh_installdocs:
 	dh_installdocs -pcheckbox ./README 
-	dh_installdocs -pcheckbox-cli ./README 
-	dh_installdocs -pcheckbox-ocp ./README 
-	dh_installdocs -pcheckbox-urwid ./README 
-	dh_installdocs -pcheckbox-gtk ./README 
-	dh_installdocs -pcheckbox-qt ./README
+	dh_installdocs -pcheckbox-ocp-cli ./README 
+	dh_installdocs -pcheckbox-ocp-urwid ./README 
+	dh_installdocs -pcheckbox-ocp-gtk ./README 
+	dh_installdocs -pcheckbox-ocp-qt ./README
 	dh_installdocs -pcheckbox-hw-collection ./README
 	dh_installdocs
 
 override_dh_clean:
 	-find . -name \*.mo -exec rm {} \;
-	-rm -f debian/checkbox-cli.postrm debian/checkbox-ocp.postrm debian/checkbox-cli.postrmebian/checkbox-urwid.postrm debian/checkbox-gtk.postrm debian/checkbox-qt.postrm debian/checkbox-hw-collection.postrm
+	-rm -f debian/checkbox-ocp-cli.postrm debian/.postrm debian/checkbox-ocp-cli.postrmebian/checkbox-ocp-urwid.postrm debian/checkbox-ocp-gtk.postrm debian/checkbox-ocp-qt.postrm debian/checkbox-hw-collection.postrm
 	debconf-updatepo
 	dh_clean
