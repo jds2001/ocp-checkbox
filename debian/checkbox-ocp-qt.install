@@ -1,0 +1,6 @@
+usr/bin/checkbox-ocp-qt
+usr/lib/checkbox/qt/*
+usr/lib/python*/*-packages/checkbox_qt/*
+usr/share/applications/checkbox-qt.desktop
+usr/share/checkbox/examples/checkbox-ocp-qt.ini
+usr/share/dbus-1/services/*

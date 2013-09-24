@@ -1,0 +1,4 @@
+usr/bin/checkbox-ocp-gtk
+usr/lib/python*/*-packages/checkbox_gtk/*
+usr/share/checkbox/examples/checkbox-ocp-gtk.ini
+usr/share/checkbox/gtk/*
