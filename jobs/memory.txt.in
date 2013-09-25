@@ -7,8 +7,22 @@ _description:
  the size of the memory modules detected by DMI.
 
 plugin: shell
-name: memory/check
+name: memory/stress_30min
 user: root
-command: memory_test
+command: stressapptest -s 1800
 _description:
  Test and exercise memory.
+
+plugin: shell
+name: memory/stress_1hr
+user: root
+command: stressapptest -s 3600
+_description:
+ Test and exercise memory.
+
+plugin: shell
+name: memory/mcelog_check
+user: root
+command: cat /var/log/mcelog; [ ! -s /var/log/mcelog ]
+_description:
+ Grabs mcelog containing memory errors.
