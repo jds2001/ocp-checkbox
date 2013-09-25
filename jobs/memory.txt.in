@@ -20,17 +20,9 @@ command: stressapptest -s 3600
 _description:
  Test and exercise memory.
 
-plugin: local
-name: memory/error_check
-user: root
-command: [ ! -s /var/log/mcelog ] || exit 0
-_description:
-  Checks for bit errors that occured during stress run 
-
 plugin: shell
 name: memory/mcelog_check
 user: root
-depends: memory/error_check
-command: cat /var/log/mcelog; exit 1
+command: cat /var/log/mcelog; [ ! -s /var/log/mcelog ]
 _description:
  Grabs mcelog containing memory errors.
