@@ -1,13 +1,13 @@
 checkbox (1.16.12~OCP) UNRELEASED; urgency=low
 
   [ Jeff Marcom ]
+  * Added googlestress app memory tests
   * Updated plainbox based on version 0.4.dev in lp:checkbox (16.12)
 
   [ Jeff Lane ]
   * Updated OCP Checkbox to latest checkbox trunk, 0.16.11 revno 2353
 
- -- Jeff Marcom <jeff.marcom@canonical.com>  Fri, 13 Sept 2013 10:13:04 -0400
-
+ -- Jeff Marcom <jeff.marcom@canonical.com>  Mon, 23 Sept 2013 10:13:04 -0400
 
 checkbox (1.16.6~OCP) UNRELEASED; urgency=low
 

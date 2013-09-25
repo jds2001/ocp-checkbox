@@ -30,6 +30,7 @@ dmidecode_attachment
 efi_attachment
 lspci_attachment
 lshw_attachment
+mcelog_attachment
 meminfo_attachment
 modprobe_attachment
 modules_attachment
@@ -63,6 +64,8 @@ disk/smart
 disk/smart_.*
 __memory__
 memory/info
+memory/stress_30min
+memory/mcelog_check
 __miscellanea__
 miscellanea/ipmi_test
 __networking__
