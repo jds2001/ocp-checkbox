@@ -5,6 +5,7 @@ checkbox (1.16.12~OCP) UNRELEASED; urgency=low
   * Updated plainbox based on version 0.4.dev in lp:checkbox (16.12)
   * Updated checkbox OCP intro prompt
   * Updated Open Compute ready whitelist with new power management, cpu stress, and networking tests"
+  * Added 12hr idle verification test and sylog check for PCI/Device errors
 
   [ Jeff Lane ]
   * Updated OCP Checkbox to latest checkbox trunk, 0.16.11 revno 2353
