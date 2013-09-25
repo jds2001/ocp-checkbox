@@ -26,11 +26,19 @@ from checkbox.user_interface import PREV
 class IntroPrompt(Plugin):
 
     welcome_text = String(default=_("""\
-Welcome to System Testing!
+Welcome to the official test suite for the Open Compute project.
 
-Checkbox provides tests to confirm that your system is working \
-properly. Once you are finished running the tests, you can view \
-a summary report for your system.""") + _("""
+Checkbox OCP provides numerous tests to validate your hardware operates 
+within guidelines defined by opencompute-ready and/or opencompute-certified
+compliance and interoperability scope. 
+
+Once you are finished running the test suite, you can view a summary 
+report for your system in the following location:
+
+/home/<user>/.cache/checkbox/submission.xml.
+
+*Checkbox-OCP is a product developed by Canonical with the 
+help of members of Facebook, AVL, and the Open Compute project*""") + _("""
 
 Warning: Some tests could cause your system to freeze \
 or become unresponsive. Please save all your work \
