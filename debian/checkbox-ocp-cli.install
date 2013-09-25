@@ -1,0 +1,3 @@
+usr/bin/checkbox-ocp-cli
+usr/lib/python*/*-packages/checkbox_cli/*
+usr/share/checkbox/examples/checkbox-ocp-cli.ini

@@ -1,0 +1,3 @@
+usr/bin/checkbox-ocp-urwid
+usr/lib/python*/*-packages/checkbox_urwid/*
+usr/share/checkbox/examples/checkbox-ocp-urwid.ini
