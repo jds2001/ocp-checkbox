@@ -1,3 +1,27 @@
+plugin: shell
+name: miscellanea/syslog_check
+command: SYSLOG_ERROR=`grep -i "${acpi,device} error" /var/log/syslog -A 20 -B 20`; echo $SYSLOG_ERROR >> /dev/stderr; [ -z "$SYSLOG_ERROR" ]
+_description:
+ Checks the system log for any critical pci/pcie or acpi event errors
+
+plugin: shell
+name: miscellanea/idle_check
+command: [ `uptime | awk '{split($0,a,":"); print a[1]}'` -lt 12 ]
+
+plugin: manual
+name: miscellanea/12hr_idle_verify
+depends: miscellanea/idle_check
+_description:
+ PURPOSE:
+   Warning. We could not verify that the system has already completed a 12 hour idle session.
+   This test will ask you to verify the system has remained active and booted to an OS for 12+ hours.
+ STEPS:
+   1. Prior to running this test, you should have attempted to let the machine idle for more than 12 hrs while booted to an OS.
+ VERIFICATION:
+   1. Select Yes if the system remained on and booted to an operating system for 12 hours without error.
+   2. Select No if you have not allowed the system to be on and booted to an operating system for 12 hours.
+   3. Select No if you attempted to let the system remain idle for 12 hours and it failed to do so for any reason/
+
 plugin: manual
 name: miscellanea/tester-info
 _description:

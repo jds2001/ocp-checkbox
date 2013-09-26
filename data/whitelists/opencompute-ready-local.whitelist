@@ -68,6 +68,9 @@ memory/stress_30min
 memory/mcelog_check
 __miscellanea__
 miscellanea/ipmi_test
+miscellanea/idle_check
+miscellanea/syslog_check
+miscellanea/12hr_idle_verify
 __networking__
 networking/detect
 networking/bandwidth
