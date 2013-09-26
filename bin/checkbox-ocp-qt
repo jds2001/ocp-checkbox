@@ -1,16 +1,12 @@
 #!/bin/bash
 
-set -e
-
 export XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
 export CHECKBOX_DATA=${CHECKBOX_DATA:-.}
 export CHECKBOX_SHARE=${CHECKBOX_SHARE:-.}
-export CHECKBOX_FRONTEND=${CHECKBOX_FRONTEND:-$CHECKBOX_SHARE/qt/frontend}
 export CHECKBOX_OPTIONS=${CHECKBOX_OPTIONS:---whitelist-file=$CHECKBOX_SHARE/data/whitelists/opencompute-ready-local.whitelist}
 export PYTHONPATH=$PYTHONPATH:$CHECKBOX_SHARE
 
-grep -q "Ubuntu" /etc/issue
-if [ $? -ne 0 ] && [ ! -L /etc/checkbox.d/configs ]
+if ( grep -q "Ubuntu" /etc/issue ) && [ ! -L /etc/checkbox.d/configs ]
 then ln -s /usr/share/checkbox/examples /etc/checkbox.d/configs
 fi
 
@@ -21,11 +17,6 @@ then
     then
         mv -f $old_data $CHECKBOX_DATA
     fi
-fi
-
-if [ -e $CHECKBOX_FRONTEND ]
-then
-    (cd $CHECKBOX_FRONTEND; qmake; make; ./checkbox-qt-service &)
 fi
 
 python3 $CHECKBOX_SHARE/run "$@" $CHECKBOX_SHARE/configs/$(basename $0).ini
