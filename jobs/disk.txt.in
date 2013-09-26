@@ -76,6 +76,7 @@ plugin: local
 name: disk/storage_devices
 requires:
  device.category == 'DISK'
+ package.name == 'bonnie++'
 _description: Verify that storage devices, such as Fibre Channel and RAID can be detected and perform under stress.
 command:
  cat <<'EOF' | run_templates -t -s 'udev_resource | filter_templates -w "category=DISK"'
