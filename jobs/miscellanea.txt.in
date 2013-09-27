@@ -6,7 +6,7 @@ _description:
 
 plugin: shell
 name: miscellanea/idle_check
-command: [ `uptime | awk '{split($0,a,":"); print a[1]}'` -lt 12 ]
+command: [ `uptime | awk '{split($3,a,":"); print a[1]}'` -lt 12 ] && [[ "`uptime | awk '{print $4}'`" == *min* ]] && [[ "`uptime`" != *day* ]]
 _description:
  Quick check to validate hardware has remained idle for 12+ hours
 
