@@ -1,0 +1,51 @@
+#!/bin/bash
+
+# disk_stress <TEMPDIR>
+# Written by Jeff Lane <jeff@ubuntu.com>
+# Wrapper to execute stressapptest creating one disk I/O thread
+# per CPU core.
+
+#RUNTIME=600    #10 Minutes
+RUNTIME=1800   #30 Minutes
+#RUNTIME=3600   #1 Hour
+CMD="stressapptest -v 20 -s $RUNTIME" 
+TIME=`date +%s`
+FILESIZE='402653184'    #384 MB
+#FILESIZE='536870912'    #512 MB
+#FILESIZE='1073741824'   #1 GB
+
+# DISK is required
+if [ ! -n $1 ]; then
+    echo "You must specify a block device (ex. /dev/sda)"
+    exit 1
+else
+    DISK=$1
+fi
+
+# Find out where we're mounted or exit
+if [[ `mount | grep $DISK` ]]; then
+    TEMPDIR=`mount | grep $DISK | awk '{print $3}'`/temp
+else
+    echo "Disk $DISK does not appear to be mounted. Exiting."
+    exit 1
+fi
+
+# Verify TEMPDIR exists, or create it
+if [ ! -d $TEMPDIR ]; then
+    mkdir -p $TEMPDIR
+fi
+
+# Create our command line. SAT requires one -f parameter per disk I/O thread
+for x in `seq 1 $(cat /proc/cpuinfo |grep ocessor|wc -l)`; do
+    CMD="$CMD -f $TEMPDIR/disk_stress_data-$x-$TIME --filesize $FILESIZE"
+done
+
+echo "Executing SAT command: ${CMD}"
+echo
+$CMD 2>&1
+retcode=$?
+
+echo "Cleaning up"
+rm -rf $TEMPDIR
+
+exit $retcode
