@@ -9,6 +9,9 @@ checkbox (1.16.12~OCP) UNRELEASED; urgency=low
 
   [ Jeff Lane ]
   * Updated OCP Checkbox to latest checkbox trunk, 0.16.11 revno 2353
+  * Enabled bonnie++ tests after noting that bonnie++ is available via yum and
+    apt. Added new disk io_stress jobs and disk_stress script to add disk
+    testing via stressapptest.
 
  -- Jeff Marcom <jeff.marcom@canonical.com>  Mon, 23 Sep 2013 10:13:04 -0400
 

@@ -62,6 +62,8 @@ disk/stats
 disk/stats_.*
 disk/smart
 disk/smart_.*
+disk/io_stress
+disk/io_stress_.*
 disk/storage_devices
 disk/storage_device_.*
 __ipmi__
