@@ -33,12 +33,12 @@ command:
   shopt -s extglob
   cat $CHECKBOX_SHARE/jobs/info.txt?(.in)
 
-name: __ipmi_out_of_band__
+name: __ipmi__
 plugin: local
 _description: IPMI out of band tests
 command:
   shopt -s extglob
-  cat $CHECKBOX_SHARE/jobs/ipmi_out_of_band.txt?(.in)
+  cat $CHECKBOX_SHARE/jobs/ipmi.txt?(.in)
 
 name: __memory__
 plugin: local
