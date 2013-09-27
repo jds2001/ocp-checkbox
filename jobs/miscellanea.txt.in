@@ -7,6 +7,8 @@ _description:
 plugin: shell
 name: miscellanea/idle_check
 command: [ `uptime | awk '{split($0,a,":"); print a[1]}'` -lt 12 ]
+_description:
+ Quick check to validate hardware has remained idle for 12+ hours
 
 plugin: manual
 name: miscellanea/12hr_idle_verify
