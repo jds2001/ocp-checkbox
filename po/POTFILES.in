@@ -6,7 +6,7 @@ qt/checkbox-qt.desktop.in
 [type: gettext/rfc822deb] jobs/dcmi_in_band.txt.in
 [type: gettext/rfc822deb] jobs/disk.txt.in
 [type: gettext/rfc822deb] jobs/info.txt.in
-[type: gettext/rfc822deb] jobs/ipmi_out_of_band.txt.in
+[type: gettext/rfc822deb] jobs/ipmi.txt.in
 [type: gettext/rfc822deb] jobs/local.txt.in
 [type: gettext/rfc822deb] jobs/memory.txt.in
 [type: gettext/rfc822deb] jobs/miscellanea.txt.in
