@@ -62,12 +62,16 @@ disk/stats
 disk/stats_.*
 disk/smart
 disk/smart_.*
+__ipmi__
+ipmi/in_band/admin/chassis_info
+ipmi/in_band/admin/chassis_self_test
+ipmi/in_band/admin/detailed_sensor_readings
+ipmi/in_band/admin/chassis_status
 __memory__
 memory/info
 memory/stress_30min
 memory/mcelog_check
 __miscellanea__
-miscellanea/ipmi_test
 miscellanea/idle_check
 miscellanea/syslog_check
 miscellanea/12hr_idle_verify

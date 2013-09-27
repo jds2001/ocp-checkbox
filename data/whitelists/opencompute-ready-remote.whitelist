@@ -14,7 +14,7 @@ optical_drive
 package
 sleep
 uname
-__ipmi_out_of_band__
+__ipmi__
 ipmi/out_of_band/admin/chassis_info
 ipmi/out_of_band/admin/power_off
 ipmi/out_of_band/admin/power_on
