@@ -12,6 +12,8 @@ checkbox (1.16.12~OCP) UNRELEASED; urgency=low
   * Enabled bonnie++ tests after noting that bonnie++ is available via yum and
     apt. Added new disk io_stress jobs and disk_stress script to add disk
     testing via stressapptest.
+  * debian/control: promoted several packages from suggest to depends to ensure
+    they are installed along with checkbox-ocp (LP: #1233333)
 
  -- Jeff Marcom <jeff.marcom@canonical.com>  Mon, 23 Sep 2013 10:13:04 -0400
 
