@@ -35,7 +35,7 @@ command:
 
 name: __ipmi__
 plugin: local
-_description: IPMI out of band tests
+_description: IPMI tests
 command:
   shopt -s extglob
   cat $CHECKBOX_SHARE/jobs/ipmi.txt?(.in)
