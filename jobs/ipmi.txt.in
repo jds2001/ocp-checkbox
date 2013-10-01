@@ -149,3 +149,27 @@ command: ipmitool -I lanplus -H $IPMI_TARGET -U $IPMI_ADMIN -P $IPMI_ADMIN_PASSW
 _description:
  Retrieve Chassis Status information with Admin credentials
 
+plugin: shell
+name: ipmi/in_band/admin/sel_list
+requires: package.name == 'ipmitool'
+user: root
+command: ipmitool sel list -C3
+_description:
+ List SEL log
+
+plugin: shell
+name: ipmi/in_band/admin/mc_info
+requires: package.name == 'ipmitool'
+user: root
+command: ipmitool mc info -C3
+_description:
+ List mc info
+
+plugin: shell
+name: ipmi/in_band/admin/lan_print
+requires: package.name == 'ipmitool'
+user: root
+command: ipmitool lan print -C3
+_description:
+ List lan info
+
